@@ -1,7 +1,7 @@
 fonte,priorita,modalita,note
 ubs,1,attiva,Storico UBS per emittente (formato verificato)
-equita,1,prova,PDF storico Equita: i risultati vanno in data/in_verifica.csv finché non passi a 'attiva'
-intesa,1,prova,Registro 'Equity Research Publications in Last 12M' (si legge il file più recente); solo variazioni
+equita,1,attiva,PDF storico Equita: i risultati vanno in data/in_verifica.csv finché non passi a 'attiva'
+intesa,1,attiva,Registro 'Equity Research Publications in Last 12M' (si legge il file più recente); solo variazioni
 soldionline,3,attiva,Articoli giornalieri 'Le raccomandazioni del ...' (formato verificato)
 4trading,2,attiva,Articoli giornalieri 'Raccomandazioni analisti' (la tua fonte storica)
 teleborsa,4,prova,Estrazione da testo libero: tenere in prova
