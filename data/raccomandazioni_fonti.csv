@@ -1,0 +1,63 @@
+ticker,data,emittente,raccomandazione,target,fonte,acquisito_il
+CRL,2026-11-13,Mediobanca,Outperform,34.0,soldionline,2026-11-15T20:36
+LDO,2026-11-13,Morgan Stanley,Overweight,77.0,soldionline,2026-11-15T20:36
+ORS,2026-11-13,IntesaSanpaolo,Buy,25.0,soldionline,2026-11-15T20:36
+PST,2026-11-13,Barclays,Overweight,34.0,soldionline,2026-11-15T20:36
+REY,2026-11-13,Intermonte,Buy,185.0,soldionline,2026-11-15T20:36
+SFL,2026-11-13,IntesaSanpaolo,Neutral,2.3,soldionline,2026-11-15T20:36
+SBC,2026-11-13,IntesaSanpaolo,Buy,6.0,soldionline,2026-11-15T20:36
+SYS,2026-11-13,IntesaSanpaolo,Buy,9.5,soldionline,2026-11-15T20:36
+A2A,2026-11-12,Mediobanca,Neutral,2.65,soldionline,2026-11-15T20:36
+BEC,2026-11-12,Alantra,Buy,15.0,soldionline,2026-11-15T20:36
+IF,2026-11-12,Equita,Hold,11.5,soldionline,2026-11-15T20:36
+IF,2026-11-12,IntesaSanpaolo,Neutral,13.7,soldionline,2026-11-15T20:36
+BAMI,2026-11-12,Morgan Stanley,Equalweight,15.0,soldionline,2026-11-15T20:36
+BFF,2026-11-12,Kepler Cheuvreux,Hold,2.0,soldionline,2026-11-15T20:36
+DLG,2026-11-12,Equita,Hold,48.0,soldionline,2026-11-15T20:36
+FM,2026-11-12,Mediobanca,Outperform,9.3,soldionline,2026-11-15T20:36
+FM,2026-11-12,Equita,Buy,9.6,soldionline,2026-11-15T20:36
+FF,2026-11-12,IntesaSanpaolo,Buy,9.7,soldionline,2026-11-15T20:36
+GMS,2026-11-12,ValueTrack,,2.6,soldionline,2026-11-15T20:36
+GVS,2026-11-12,Equita,Buy,7.1,soldionline,2026-11-15T20:36
+ITM,2026-11-12,Equita,Buy,36.0,soldionline,2026-11-15T20:36
+REVO,2026-11-12,Equita,Hold,23.0,soldionline,2026-11-15T20:36
+TPRO,2026-11-12,Deutsche Bank,Buy,45.0,soldionline,2026-11-15T20:36
+TPRO,2026-11-12,Jp Morgan,Overweight,38.0,soldionline,2026-11-15T20:36
+IOT,2026-11-10,ValueTrack,,5.1,soldionline,2026-11-15T20:36
+IOT,2026-11-10,IntesaSanpaolo,Buy,5.6,soldionline,2026-11-15T20:36
+UCG,2026-11-10,Oddo BHF,Neutral,95.0,soldionline,2026-11-15T20:36
+ZV,2026-11-10,IntesaSanpaolo,Buy,8.0,soldionline,2026-11-15T20:36
+ENI,2026-11-09,RBC Capital,Market perform,32.0,soldionline,2026-11-15T20:36
+GF,2026-11-09,IntesaSanpaolo,Buy,26.9,soldionline,2026-11-15T20:36
+SIT,2026-11-09,IntesaSanpaolo,Buy,2.9,soldionline,2026-11-15T20:36
+VNE,2026-11-09,EnVent,Outperform,6.0,soldionline,2026-11-15T20:36
+ANIM,2026-11-06,IntesaSanpaolo,Neutral,7.3,soldionline,2026-11-15T20:36
+ASC,2026-11-06,Mediobanca,Neutral,4.0,soldionline,2026-11-15T20:36
+BSS,2026-11-06,IntesaSanpaolo,Neutral,5.7,soldionline,2026-11-15T20:36
+COM,2026-11-06,Equita,Buy,61.0,soldionline,2026-11-15T20:36
+ENI,2026-11-06,Morgan Stanley,Hold,25.2,soldionline,2026-11-15T20:36
+ICOS,2026-11-06,Mediobanca,Outperform,15.5,soldionline,2026-11-15T20:36
+ITD,2026-11-06,Intermonte,Buy,14.0,soldionline,2026-11-15T20:36
+NEXI,2026-11-06,Equita,Hold,3.5,soldionline,2026-11-15T20:36
+PIRC,2026-11-06,Equita,Hold,6.8,soldionline,2026-11-15T20:36
+PST,2026-11-06,Exane Bnp Paribas,Outperform,28.0,soldionline,2026-11-15T20:36
+WIIT,2026-11-06,IntesaSanpaolo,Buy,33.0,soldionline,2026-11-15T20:36
+WIIT,2026-11-06,Equita,Buy,30.0,soldionline,2026-11-15T20:36
+ARIS,2026-11-05,Mediobanca,Outperform,4.6,soldionline,2026-11-15T20:36
+ELC,2026-11-05,IntesaSanpaolo,Neutral,1.45,soldionline,2026-11-15T20:36
+ISP,2026-11-05,RBC Capital,Outperform,7.75,soldionline,2026-11-15T20:36
+TGYM,2026-11-05,Citi,Buy,17.0,soldionline,2026-11-15T20:36
+RACE,2026-11-04,RBC Capital,Buy,435.0,soldionline,2026-11-15T20:36
+RACE,2026-11-04,IntesaSanpaolo,Buy,408.0,soldionline,2026-11-15T20:36
+TPRO,2026-11-04,Barclays,Overweight,40.0,soldionline,2026-11-15T20:36
+UD,2026-11-04,Intermonte,Buy,4.3,soldionline,2026-11-15T20:36
+UD,2026-11-04,Euroland Corporate,Buy,4.1,soldionline,2026-11-15T20:36
+LTMC,2026-11-03,Kepler Cheuvreux,Buy,30.0,soldionline,2026-11-15T20:36
+MONC,2026-11-03,Hsbc,Buy,56.0,soldionline,2026-11-15T20:36
+DEX,2026-11-02,Equita,Buy,2.9,soldionline,2026-11-15T20:36
+FILA,2026-11-02,Equita,Buy,12.5,soldionline,2026-11-15T20:36
+PRY,2026-11-02,IntesaSanpaolo,Buy,165.0,soldionline,2026-11-15T20:36
+CLI,2026-10-06,IntesaSanpaolo,Buy,6.4,soldionline,2026-11-15T20:36
+ALMS,2026-10-07,IntesaSanpaolo,Buy,6.0,soldionline,2026-11-15T20:36
+GRAL,2026-10-09,IntesaSanpaolo,Neutral,1.0,soldionline,2026-11-15T20:36
+REVO,2026-10-09,IntesaSanpaolo,Buy,28.2,soldionline,2026-11-15T20:36

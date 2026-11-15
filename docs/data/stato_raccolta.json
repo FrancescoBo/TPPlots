@@ -1,0 +1,66 @@
+{
+ "eseguito_il": "2026-11-15T20:23",
+ "fonti": {
+  "ubs": {
+   "modalita": "attiva",
+   "lette": 0,
+   "nuove": 0,
+   "doppioni": 0,
+   "quarantena": 0,
+   "conflitti": 0,
+   "errore": ""
+  },
+  "equita": {
+   "modalita": "prova",
+   "lette": 7,
+   "nuove": 4,
+   "doppioni": 3,
+   "quarantena": 0,
+   "conflitti": 0,
+   "errore": ""
+  },
+  "intesa": {
+   "modalita": "prova",
+   "lette": 0,
+   "nuove": 0,
+   "doppioni": 0,
+   "quarantena": 0,
+   "conflitti": 0,
+   "errore": "tempo massimo raggiunto: dati parziali"
+  },
+  "soldionline": {
+   "modalita": "attiva",
+   "lette": 223,
+   "nuove": 62,
+   "doppioni": 157,
+   "quarantena": 2,
+   "conflitti": 2,
+   "errore": ""
+  },
+  "4trading": {
+   "modalita": "prova",
+   "lette": 0,
+   "nuove": 0,
+   "doppioni": 0,
+   "quarantena": 0,
+   "conflitti": 0,
+   "errore": ""
+  },
+  "teleborsa": {
+   "modalita": "prova",
+   "lette": 0,
+   "nuove": 0,
+   "doppioni": 0,
+   "quarantena": 0,
+   "conflitti": 0,
+   "errore": ""
+  }
+ },
+ "nuove_totali": 62,
+ "emittenti_nuovi": [
+  "Euroland Corporate",
+  "IntesaSanpaolo",
+  "RBC Capital"
+ ],
+ "non_riconosciuti": 679
+}
