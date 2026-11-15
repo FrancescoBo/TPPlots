@@ -10,7 +10,8 @@ def raccogli(ana, oggi, giorni=14):
     modelli = pd.read_csv(p, dtype=str).fillna('').url.tolist()
     out = []
     for modello in modelli:
-        if not modello.strip() or modello.startswith('#'):
+        modello = modello.strip()
+        if not modello.startswith('http'):
             continue
         if '{' not in modello:
             out += generico.tabelle_html(modello, '4trading', ana, oggi)

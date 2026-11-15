@@ -1,4 +1,5 @@
 """UBS Investment Bank - 'Research Disclosures': storico data / prezzo / target / rating per emittente."""
+import html as htmllib
 import re
 import string
 import pandas as pd
@@ -13,16 +14,19 @@ def _mappa_pagine(ana):
     if CACHE.exists() and (pd.Timestamp.now() - pd.Timestamp(CACHE.stat().st_mtime, unit='s')).days < 30:
         d = pd.read_csv(CACHE, dtype=str)
         return dict(zip(d.ticker, d.pagina))
-    mappa = {}
-    for lettera in string.ascii_uppercase:
+    mappa, pagine_ok, link = {}, 0, 0
+    for lettera in string.ascii_uppercase + '0':
         html = c.scarica(f'{BASE}browse{lettera}_new.html', tentativi=1)
         if not html:
             continue
+        pagine_ok += 1
         for href, testo in re.findall(r'<a[^>]+href=["\']([^"\']*\d+_\d+_new\.html)["\'][^>]*>(.*?)</a>', html, flags=re.S):
-            nome = c.pulisci(re.sub(r'<[^>]+>', ' ', testo))
+            link += 1
+            nome = c.pulisci(re.sub(r'<[^>]+>', ' ', htmllib.unescape(testo))).rstrip('* ')
             tk = ana.ticker(nome, 'ubs-indice')
             if tk:
                 mappa[tk] = href if href.startswith('http') else BASE + href.split('/')[-1]
+    print(f'    ubs: indice letto in {pagine_ok} pagine, {link} link, {len(mappa)} titoli nostri riconosciuti')
     if mappa:
         pd.DataFrame(sorted(mappa.items()), columns=['ticker', 'pagina']).to_csv(CACHE, index=False)
     return mappa
@@ -31,10 +35,17 @@ def _mappa_pagine(ana):
 def raccogli(ana, oggi, giorni=45):
     fonte = 'ubs'
     out, limite = [], oggi - pd.Timedelta(days=giorni)
-    for tk, url in _mappa_pagine(ana).items():
+    pagine = _mappa_pagine(ana)
+    scaricate = con_tabella = 0
+    for tk, url in pagine.items():
         html = c.scarica(url, tentativi=2)
-        if not html or 'Price Target (€)' not in html:   # solo pagine con target in euro
+        if not html:
             continue
+        scaricate += 1
+        testo = htmllib.unescape(html)
+        if not re.search(r'Price Target\s*\((€|EUR)\)', testo):   # solo pagine con target in euro
+            continue
+        con_tabella += 1
         for r in c.righe_tabelle(html):
             if len(r) < 4:
                 continue
@@ -42,4 +53,5 @@ def raccogli(ana, oggi, giorni=45):
             if d is None or d < limite:
                 continue
             out.append(c.record(tk, d, 'Ubs', ana.rating(r[3][0]), c.numero(r[2][0]), fonte))
+    print(f'    ubs: pagine titolo scaricate {scaricate}/{len(pagine)}, con tabella target in euro {con_tabella}')
     return out
