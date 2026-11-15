@@ -215,6 +215,10 @@ class Anagrafica:
             return self.per_nome[n]
         if nome.strip() in self.ticker_validi:
             return nome.strip()
+        # nome breve = inizio di un solo nome completo (es. 'CAREL' -> 'CAREL INDUSTRIES')
+        pref = {tk for k, tk in self.per_nome.items() if len(n) >= 3 and k.startswith(n + ' ')}
+        if len(pref) == 1:
+            return pref.pop()
         vicini = difflib.get_close_matches(n, list(self.per_nome), n=1, cutoff=0.93)
         if vicini:
             return self.per_nome[vicini[0]]
