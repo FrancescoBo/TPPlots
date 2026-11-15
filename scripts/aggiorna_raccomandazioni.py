@@ -11,6 +11,7 @@ Regole di deduplica (stesso ticker + stesso emittente):
 import argparse
 import json
 import sys
+import time
 import traceback
 from pathlib import Path
 
@@ -22,6 +23,7 @@ from raccolta import equita, intesa, quattro_trading, soldionline, teleborsa, ub
 
 ROOT = c.ROOT
 FINESTRA_DOPPIONI = 4      # giorni
+MINUTI_PER_FONTE = 12      # tempo massimo per ogni fonte
 SCARTO_MAX = 4.0           # un target fuori da [1/4, 4] volte la mediana storica del titolo va in quarantena
 
 
@@ -94,6 +96,9 @@ def main():
         info = stato['fonti'][f.fonte] = {'modalita': f.modalita, 'lette': 0, 'nuove': 0, 'doppioni': 0, 'quarantena': 0, 'conflitti': 0, 'errore': ''}
         if f.modalita == 'off' or f.fonte not in funzioni:
             continue
+        c.SCADENZA[0] = time.time() + MINUTI_PER_FONTE * 60
+        c.FALLIMENTI.clear()
+        t0 = time.time()
         try:
             d = df_da_record(funzioni[f.fonte](ana))
         except Exception:
@@ -102,6 +107,9 @@ def main():
             continue
         d = d[(d.data <= oggi + pd.Timedelta(days=1))] if not d.empty else d
         info['lette'] = len(d)
+        if time.time() > c.SCADENZA[0]:
+            info['errore'] = 'tempo massimo raggiunto: dati parziali'
+            print(f'[{f.fonte}] tempo massimo raggiunto, dati parziali')
         for r in d.itertuples(index=False):
             # controllo di plausibilità sul target
             rif = ref.get(r.ticker)
