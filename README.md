@@ -59,3 +59,29 @@ python scripts/aggiorna_prezzi.py
 python scripts/costruisci.py
 python -m http.server -d docs     # poi apri http://localhost:8000
 ```
+
+## Raccolta automatica dei target (ogni notte)
+
+`scripts/aggiorna_raccomandazioni.py` gira ogni giorno intorno a mezzanotte (workflow *Aggiorna raccomandazioni, prezzi e pagina*),
+legge le fonti elencate in `config/fonti.csv`, elimina i doppioni e aggiunge le righe nuove a `data/raccomandazioni.csv`; poi aggiorna prezzi e pagina.
+Ogni domenica (o con *Run workflow → storico*) recupera anche lo storico dalle pagine per titolo di Soldionline.
+
+| Fonte | Modalità iniziale | Note |
+|---|---|---|
+| `ubs` | attiva | storico data/prezzo/target/rating per titolo (pagine pubbliche UBS) |
+| `soldionline` | attiva | articoli giornalieri "Le raccomandazioni del …" + pagine per titolo nel recupero storico |
+| `equita`, `intesa` | prova | PDF/archivi pubblici: formato non verificato, le righe finiscono in `data/in_verifica.csv` |
+| `4trading` | prova | metti gli URL in `config/url_4trading.csv` |
+| `teleborsa` | prova | estrazione da testo libero |
+
+**Modalità** (`config/fonti.csv`): `attiva` = scrive nel dataset · `prova` = scrive solo in `data/in_verifica.csv` · `off` = ignorata.
+Quando le righe in verifica risultano corrette, cambia la modalità in `attiva`.
+
+**Deduplica** (stesso titolo + stesso emittente): stessa data = doppione (se il target è diverso resta il primo e il caso va in `data/conflitti.csv`);
+date entro 4 giorni con stesso target e stesso giudizio = doppione; a parità vince la fonte con priorità più alta (numero più basso).
+
+**File di controllo** (tutti in `data/`): `raccomandazioni_fonti.csv` (da quale fonte arriva ogni riga aggiunta), `quarantena.csv` (target fuori scala rispetto alla mediana del titolo),
+`non_riconosciuti.csv` (nomi di società non associati a un ticker: aggiungili in `config/alias_societa.csv`), `in_verifica.csv`, `conflitti.csv`.
+`docs/data/stato_raccolta.json` riassume l'ultimo giro (righe lette/nuove/doppioni/errori per fonte). Nuovi nomi di istituti vanno uniformati in `config/alias_emittenti.csv`.
+
+Prova offline del codice: `python tests/test_raccolta.py`.
