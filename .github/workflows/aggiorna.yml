@@ -1,0 +1,34 @@
+name: Aggiorna prezzi e pagina
+
+on:
+  schedule:
+    - cron: '17 17 * * 1-5'   # giorni feriali, ~18:17 ora italiana (UTC+1)
+  workflow_dispatch:          # avvio manuale dalla scheda Actions
+  push:
+    paths: ['data/**', 'config/**', 'scripts/**']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Aggiorna prezzi
+        if: github.event_name != 'push'
+        run: python scripts/aggiorna_prezzi.py
+        continue-on-error: true
+      - name: Ricalcola grafici e recap
+        run: python scripts/costruisci.py
+      - name: Salva modifiche
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data docs config
+          git diff --cached --quiet || git commit -m "Aggiornamento automatico $(date +%F)"
+          git push
