@@ -23,6 +23,7 @@ from raccolta import equita, intesa, quattro_trading, soldionline, teleborsa, ub
 
 ROOT = c.ROOT
 FINESTRA_DOPPIONI = 4      # giorni
+SOLO_VARIAZIONI = {'intesa'}   # fonti che ripetono giudizio e target a ogni pubblicazione: si tiene solo ciò che cambia
 MINUTI_PER_FONTE = 12      # tempo massimo per ogni fonte
 SCARTO_MAX = 4.0           # un target fuori da [1/4, 4] volte la mediana storica del titolo va in quarantena
 
@@ -46,6 +47,17 @@ def df_da_record(rec):
     d['data'] = pd.to_datetime(d.data).dt.normalize()
     d['raccomandazione'] = d.raccomandazione.fillna('')
     return d
+
+
+def ripete_precedente(r, per_chiave, classi):
+    """True se l'ultimo giudizio dello stesso emittente sul titolo (data <= r.data) ha già stesso target e stessa classe."""
+    prec = [e for e in per_chiave.get((r.ticker, r.emittente), []) if e['data'] <= r.data]
+    if not prec:
+        return False
+    e = max(prec, key=lambda x: x['data'])
+    stesso_t = pd.notna(r.target) and pd.notna(e['target']) and abs(r.target - e['target']) < 1e-9
+    cl = lambda v: classi.get(str(v).lower(), str(v).lower())
+    return bool(stesso_t and (not r.raccomandazione or not e['raccomandazione'] or cl(r.raccomandazione) == cl(e['raccomandazione'])))
 
 
 def aggiungi_se_nuovo(r, esistenti, per_chiave, classi):
@@ -128,6 +140,8 @@ def main():
                 continue
             if f.modalita == 'prova':
                 esito, _ = aggiungi_se_nuovo(r, None, per_chiave, ana.classi)
+                if esito == 'nuovo' and f.fonte in SOLO_VARIAZIONI and ripete_precedente(r, per_chiave, ana.classi):
+                    esito = 'doppione'
                 if esito == 'nuovo':
                     verifica.append(r._asdict())
                     info['nuove'] += 1
@@ -135,6 +149,8 @@ def main():
                     info['doppioni'] += 1
                 continue
             esito, motivo = aggiungi_se_nuovo(r, None, per_chiave, ana.classi)
+            if esito == 'nuovo' and f.fonte in SOLO_VARIAZIONI and ripete_precedente(r, per_chiave, ana.classi):
+                esito = 'doppione'
             if esito == 'nuovo':
                 nuove.append(r._asdict())
                 per_chiave.setdefault((r.ticker, r.emittente), []).append({'data': r.data, 'target': r.target, 'raccomandazione': r.raccomandazione})
