@@ -33,7 +33,7 @@ def raccoglitori(oggi, giorni, storico):
         'soldionline': lambda a: soldionline.giornaliero(a, oggi, giorni) + (soldionline.storico(a, oggi, 400) if storico else []),
         'equita': lambda a: equita.raccogli(a, oggi, giorni if not storico else 400),
         'intesa': lambda a: intesa.raccogli(a, oggi, giorni if not storico else 400),
-        '4trading': lambda a: quattro_trading.raccogli(a, oggi, giorni),
+        '4trading': lambda a: quattro_trading.raccogli(a, oggi, giorni if not storico else 400, 14 if storico else 0),
         'teleborsa': lambda a: teleborsa.raccogli(a, oggi, giorni),
     }
     return r
