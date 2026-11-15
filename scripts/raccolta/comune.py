@@ -207,7 +207,7 @@ class Anagrafica:
         self.classi = {k.strip().lower(): v for k, v in zip(c.raccomandazione, c.classe)}
         self.non_riconosciuti = {}
 
-    def ticker(self, nome, fonte=''):
+    def ticker(self, nome, fonte='', log=True):
         n = _norm(nome)
         if not n:
             return None
@@ -222,7 +222,8 @@ class Anagrafica:
         vicini = difflib.get_close_matches(n, list(self.per_nome), n=1, cutoff=0.93)
         if vicini:
             return self.per_nome[vicini[0]]
-        self.non_riconosciuti[(nome.strip(), fonte)] = self.non_riconosciuti.get((nome.strip(), fonte), 0) + 1
+        if log:
+            self.non_riconosciuti[(nome.strip(), fonte)] = self.non_riconosciuti.get((nome.strip(), fonte), 0) + 1
         return None
 
     def emittente(self, nome):

@@ -65,12 +65,12 @@ def righe_pdf(testo, fonte, ana, emittente, giorni, oggi):
             continue
         d = next((c.data(x) for x in celle if re.search(r'\d{4}-\d{2}-\d{2}|\d{1,2}[/.]\d{1,2}[/.]\d{2,4}', x)), None)
         rating = next((x for x in celle if x.lower() in ana.classi), None)
-        tk = next((t for t in (ana.ticker(x, fonte) for x in celle if re.search(r'[A-Za-z]{3}', x) and x != rating) if t), None)
+        tk = next((t for t in (ana.ticker(x, fonte, log=False) for x in celle if re.search(r'[A-Za-z]{3}', x) and x != rating) if t), None)
         nums = [c.numero(x) for x in celle if re.fullmatch(r'[\d.,]+\s*(€|EUR)?', x) and not re.search(r'\d{4}-|/', x)]
         nums = [n for n in nums if n]
         if d is None or d < limite or not rating or not tk or not nums:
             continue
-        out.append(c.record(tk, d, emittente, rating, nums[-1], fonte))
+        out.append(c.record(tk, d, emittente, rating, nums[0], fonte))
     return out
 
 
