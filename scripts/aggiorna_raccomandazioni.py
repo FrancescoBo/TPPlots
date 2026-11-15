@@ -96,7 +96,7 @@ def main():
         info = stato['fonti'][f.fonte] = {'modalita': f.modalita, 'lette': 0, 'nuove': 0, 'doppioni': 0, 'quarantena': 0, 'conflitti': 0, 'errore': ''}
         if f.modalita == 'off' or f.fonte not in funzioni:
             continue
-        c.SCADENZA[0] = time.time() + MINUTI_PER_FONTE * 60
+        c.SCADENZA[0] = time.time() + (25 if a.storico else MINUTI_PER_FONTE) * 60
         c.FALLIMENTI.clear()
         t0 = time.time()
         try:
