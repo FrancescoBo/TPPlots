@@ -85,7 +85,15 @@ def main():
     rac = pd.read_csv(ROOT / 'data/raccomandazioni.csv', parse_dates=['data'])
     rac['emittente'] = rac.emittente.fillna('').astype(str).map(ana.emittente)
     rac['raccomandazione'] = rac.raccomandazione.fillna('').astype(str)
-    ref = rac[rac.data > oggi - pd.Timedelta(days=365)].groupby('ticker').target.median().to_dict()
+    # titoli non più quotati: si eliminano le righe successive alla revoca (errori di associazione)
+    rimosse = 0
+    for tk, rev in ana.estinti.items():
+        m = (rac.ticker == tk) & (rac.data > rev)
+        rimosse += int(m.sum())
+        rac = rac[~m]
+    recenti = rac[rac.data > oggi - pd.Timedelta(days=365)].copy()
+    recenti['target'] = recenti.target * [c.fattore_target(t, d) for t, d in zip(recenti.ticker, recenti.data)]
+    ref = recenti.groupby('ticker').target.median().to_dict()
     per_chiave = {}
     for r in rac.itertuples():
         per_chiave.setdefault((r.ticker, r.emittente), []).append({'data': r.data, 'target': r.target, 'raccomandazione': r.raccomandazione})
@@ -113,7 +121,8 @@ def main():
         for r in d.itertuples(index=False):
             # controllo di plausibilità sul target
             rif = ref.get(r.ticker)
-            if pd.notna(r.target) and rif and not (rif / SCARTO_MAX <= r.target <= rif * SCARTO_MAX):
+            t_conf = r.target * c.fattore_target(r.ticker, r.data) if pd.notna(r.target) else None
+            if t_conf is not None and rif and not (rif / SCARTO_MAX <= t_conf <= rif * SCARTO_MAX):
                 quarantena.append(dict(r._asdict(), motivo=f'target {r.target} lontano dalla mediana {rif:.2f}'))
                 info['quarantena'] += 1
                 continue
@@ -140,12 +149,20 @@ def main():
 
     # --- scrittura
     adesso = pd.Timestamp.now().isoformat(timespec='minutes')
+    if rimosse:
+        print(f'Rimosse {rimosse} righe di titoli non più quotati (config/ticker_estinti.csv)')
+    if rimosse and not nuove:
+        out = rac.copy()
+        out['data'] = out.data.dt.strftime('%Y-%m-%d')
+        out[c.COLONNE].to_csv(ROOT / 'data/raccomandazioni.csv', index=False)
     if nuove:
         n = pd.DataFrame(nuove)
         n['acquisito_il'] = adesso
         audit = ROOT / 'data/raccomandazioni_fonti.csv'
         n[c.COLONNE + ['fonte', 'acquisito_il']].to_csv(audit, mode='a', header=not audit.exists(), index=False)
         orig = pd.read_csv(ROOT / 'data/raccomandazioni.csv', parse_dates=['data'])
+        for tk, rev in ana.estinti.items():
+            orig = orig[~((orig.ticker == tk) & (orig.data > rev))]
         tot = pd.concat([n[c.COLONNE], orig], ignore_index=True)
         tot = tot.sort_values(['ticker', 'data'], ascending=[True, False], kind='stable')
         tot['data'] = tot.data.dt.strftime('%Y-%m-%d')

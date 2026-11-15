@@ -48,6 +48,9 @@ def carica(oggi):
     rac['emittente'] = rac.emittente.fillna('').astype(str).str.strip().replace(alias)
     rac['raccomandazione'] = rac.raccomandazione.fillna('').astype(str).str.strip()
     rac['classe'] = rac.raccomandazione.str.lower().map(mappa)
+    # raggruppamenti/frazionamenti (config/frazionamenti.csv): target precedenti riportati alla scala attuale
+    from raccolta.comune import fattore_target
+    rac['target'] = rac.target * [fattore_target(t, d) for t, d in zip(rac.ticker, rac.data)]
     # variazione rispetto al target precedente dello stesso emittente
     rac['_ord'] = range(len(rac))
     rac = rac.sort_values(['ticker', 'emittente', 'data', '_ord'], ascending=[True, True, True, False], kind='stable')
