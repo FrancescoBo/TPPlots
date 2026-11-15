@@ -33,9 +33,11 @@ jobs:
           command -v pdftotext || (sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils)
       - name: Raccolta raccomandazioni (tutte le fonti) e deduplica
         if: github.event_name != 'push'
+        env:
+          PYTHONUNBUFFERED: '1'
         run: |
           EXTRA=""
-          if [ "${{ github.event.inputs.storico }}" = "true" ] || [ "$(date +%u)" = "7" ]; then EXTRA="--storico"; fi
+          if [ "${{ github.event.inputs.storico }}" = "true" ] || { [ "${{ github.event_name }}" = "schedule" ] && [ "$(date +%u)" = "7" ]; }; then EXTRA="--storico"; fi
           python scripts/aggiorna_raccomandazioni.py $EXTRA
         continue-on-error: true
       - name: Aggiorna prezzi
