@@ -4,6 +4,8 @@ import re
 import subprocess
 import time
 import unicodedata
+import urllib.error
+import urllib.parse
 import urllib.request
 from html.parser import HTMLParser
 from pathlib import Path
@@ -22,23 +24,34 @@ COLONNE = ['ticker', 'data', 'emittente', 'raccomandazione', 'target']
 
 
 # ---------------------------------------------------------------- rete
-def scarica(url, tentativi=3, pausa=2.0, binario=False, timeout=30):
-    """Scarica un URL. Ritorna testo (o bytes) oppure None se 404/errore persistente."""
+SCADENZA = [None]      # istante (time.time()) oltre il quale non si scarica più: impostato per ogni fonte
+FALLIMENTI = {}        # host -> errori di rete consecutivi
+MAX_FALLIMENTI = 4     # dopo tanti errori di fila l'host viene considerato irraggiungibile
+
+
+def scarica(url, tentativi=2, pausa=1.0, binario=False, timeout=12):
+    """Scarica un URL. Ritorna testo (o bytes) oppure None se 404/errore persistente/tempo esaurito."""
+    host = urllib.parse.urlparse(url).netloc
+    if FALLIMENTI.get(host, 0) >= MAX_FALLIMENTI or (SCADENZA[0] and time.time() > SCADENZA[0]):
+        return None
     ultimo = None
     for i in range(tentativi):
         try:
             req = urllib.request.Request(url, headers={'User-Agent': UA, 'Accept-Language': 'it,en;q=0.8'})
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 dati = r.read()
+            FALLIMENTI[host] = 0
             return dati if binario else dati.decode('utf-8', errors='replace')
         except urllib.error.HTTPError as e:
             ultimo = e
             if e.code in (404, 410):
+                FALLIMENTI[host] = 0
                 return None
         except Exception as e:  # rete, timeout, TLS
             ultimo = e
         time.sleep(pausa * (i + 1))
-    print(f'    ! {url}: {ultimo}')
+    FALLIMENTI[host] = FALLIMENTI.get(host, 0) + 1
+    print(f'    ! {url}: {ultimo}' + (' (host sospeso)' if FALLIMENTI[host] >= MAX_FALLIMENTI else ''))
     return None
 
 
