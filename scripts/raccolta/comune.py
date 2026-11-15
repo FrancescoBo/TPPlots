@@ -182,9 +182,13 @@ class Anagrafica:
 
     def __init__(self):
         t = pd.read_csv(ROOT / 'config/titoli.csv', dtype=str).fillna('')
+        self.estinti = ticker_estinti()
         self.per_nome = {}
         for tk, nome in zip(t.ticker, t.nome):
-            self.per_nome[_norm(nome)] = tk
+            if tk in self.estinti:
+                continue
+            # più titoli con lo stesso nome (es. ordinarie / risparmio): vince il primo dell'elenco (l'ordinaria)
+            self.per_nome.setdefault(_norm(nome), tk)
         self.ticker_validi = set(t.ticker)
         self.per_yahoo = {s: tk for tk, s in zip(t.ticker, t.simbolo_yahoo) if s}
         self.nomi = {tk: nome for tk, nome in zip(t.ticker, t.nome)}
@@ -226,6 +230,34 @@ class Anagrafica:
     def rating(self, testo):
         t = pulisci(testo)
         return '' if t.lower() in ('n.d.', 'nd', 'n.a.', '-', 'na') else t
+
+
+def ticker_estinti():
+    """{ticker: data di revoca} da config/ticker_estinti.csv: titoli non più quotati (le righe successive sono errate)."""
+    p = ROOT / 'config/ticker_estinti.csv'
+    if not p.exists():
+        return {}
+    d = pd.read_csv(p, dtype=str).fillna('')
+    return {tk.strip(): pd.Timestamp(x) for tk, x in zip(d.ticker, d.data_revoca) if tk.strip()}
+
+
+def frazionamenti():
+    """Lista (ticker, data, fattore) da config/frazionamenti.csv."""
+    p = ROOT / 'config/frazionamenti.csv'
+    if not p.exists():
+        return []
+    d = pd.read_csv(p, dtype=str).fillna('')
+    return [(t.strip(), pd.Timestamp(x), float(f)) for t, x, f in zip(d.ticker, d.data, d.fattore) if t.strip()]
+
+
+def fattore_target(ticker, data):
+    """Moltiplicatore da applicare a un target dato `data` per riportarlo alla scala attuale del titolo
+    (raggruppamenti/frazionamenti: i target precedenti alla data dell'operazione vanno moltiplicati per il fattore)."""
+    f = 1.0
+    for t, d, k in frazionamenti():
+        if t == ticker and data < d:
+            f *= k
+    return f
 
 
 def record(ticker, d, emittente, rating, target, fonte):
