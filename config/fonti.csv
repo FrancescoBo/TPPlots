@@ -1,7 +1,7 @@
 fonte,priorita,modalita,note
 ubs,1,attiva,Storico UBS per emittente (formato verificato)
 equita,1,prova,PDF storico Equita: i risultati vanno in data/in_verifica.csv finché non passi a 'attiva'
-intesa,1,prova,Archivio Intesa Sanpaolo: idem
+intesa,1,attiva,Archivio Intesa Sanpaolo: file giornalieri AAAAMMGGEquity_ita.pdf
 soldionline,2,attiva,Articoli giornalieri 'Le raccomandazioni del ...' (formato verificato)
 4trading,3,prova,Serve config/url_4trading.csv con gli URL delle pagine giornaliere
 teleborsa,4,prova,Estrazione da testo libero: tenere in prova
