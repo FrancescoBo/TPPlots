@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Target price analisti – azioni italiane</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="viz-root">
+  <header>
+    <h1>Target price e raccomandazioni degli analisti</h1>
+    <p class="sub" id="info">Caricamento…</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab attivo" data-vista="recap">Recap</button>
+    <button class="tab" data-vista="titolo">Dettaglio titolo</button>
+  </nav>
+
+  <section id="vista-recap">
+    <div class="card">
+      <h2>Recap</h2>
+      <p class="nota">Clicca su un titolo per il dettaglio. Clicca sulle intestazioni per ordinare.</p>
+      <div class="scroll"><table id="tab-recap"></table></div>
+    </div>
+    <div class="card">
+      <h2>Capitalizzazione vs potenziale (TP medio / prezzo)</h2>
+      <p class="nota">Pieni ed etichettati = frontiera di Pareto (nessun titolo con capitalizzazione e potenziale entrambi maggiori). Clicca su un punto per il dettaglio.</p>
+      <div id="g-pareto" class="grafico alto"></div>
+    </div>
+    <div class="card">
+      <h2>Raccomandazioni correnti per titolo</h2>
+      <p class="nota">Ultima raccomandazione di ciascun emittente</p>
+      <div id="g-conteggi"></div>
+    </div>
+  </section>
+
+  <section id="vista-titolo" hidden>
+    <div class="card">
+      <div class="barra">
+        <label>Titolo <select id="sel-titolo"></select></label>
+        <div class="periodi" id="periodi">
+          <button data-g="182">6 mesi</button>
+          <button data-g="365" class="attivo">1 anno</button>
+          <button data-g="730">2 anni</button>
+          <button data-g="0">Tutto</button>
+        </div>
+      </div>
+      <div class="kpi" id="kpi"></div>
+      <p class="nota">Colore dei target rispetto al target precedente dello stesso emittente: verde alzato, rosso abbassato, nero invariato, vuoto = primo target.</p>
+      <div id="g-titolo" class="grafico alto"></div>
+    </div>
+    <div class="card">
+      <h2>Situazione per emittente</h2>
+      <p class="nota" id="nota-emittenti"></p>
+      <div class="scroll"><table id="tab-emittenti"></table></div>
+    </div>
+    <div class="card">
+      <details>
+        <summary><h2>Tutte le raccomandazioni</h2></summary>
+        <div class="scroll"><table id="tab-storico"></table></div>
+      </details>
+    </div>
+  </section>
+  <footer>Dati: raccomandazioni raccolte da 4trading.it / Soldionline; quotazioni Yahoo Finance. Non è consulenza finanziaria.</footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
