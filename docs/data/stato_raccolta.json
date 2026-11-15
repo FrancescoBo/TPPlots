@@ -1,11 +1,11 @@
 {
- "eseguito_il": "2026-11-15T20:47",
+ "eseguito_il": "2026-11-15T21:05",
  "fonti": {
   "ubs": {
    "modalita": "attiva",
-   "lette": 0,
-   "nuove": 0,
-   "doppioni": 0,
+   "lette": 20,
+   "nuove": 10,
+   "doppioni": 10,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
@@ -56,7 +56,7 @@
    "errore": ""
   }
  },
- "nuove_totali": 0,
+ "nuove_totali": 10,
  "emittenti_nuovi": [],
- "non_riconosciuti": 752
+ "non_riconosciuti": 20175
 }
