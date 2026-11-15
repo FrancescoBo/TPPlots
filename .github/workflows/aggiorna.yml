@@ -9,6 +9,10 @@ on:
         description: 'Recupero esteso (pagine storiche per titolo, ~400 giorni)'
         type: boolean
         default: false
+      rimuovi_fonte:
+        description: 'Solo pulizia: rimuove dal dataset le righe aggiunte da questa fonte (es. intesa) e non raccoglie nulla'
+        type: string
+        default: ''
   push:
     paths: ['config/**', 'scripts/**']
 
@@ -31,8 +35,11 @@ jobs:
       - run: |
           pip install -r requirements.txt
           command -v pdftotext || (sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils)
+      - name: Pulizia - rimuovi righe di una fonte
+        if: github.event.inputs.rimuovi_fonte != ''
+        run: python scripts/rimuovi_fonte.py --fonte "${{ github.event.inputs.rimuovi_fonte }}"
       - name: Raccolta raccomandazioni (tutte le fonti) e deduplica
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && github.event.inputs.rimuovi_fonte == ''
         env:
           PYTHONUNBUFFERED: '1'
         run: |
@@ -41,7 +48,7 @@ jobs:
           python scripts/aggiorna_raccomandazioni.py $EXTRA
         continue-on-error: true
       - name: Aggiorna prezzi
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && github.event.inputs.rimuovi_fonte == ''
         run: python scripts/aggiorna_prezzi.py
         continue-on-error: true
       - name: Ricalcola grafici e recap
