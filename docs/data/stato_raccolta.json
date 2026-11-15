@@ -1,49 +1,49 @@
 {
- "eseguito_il": "2026-11-15T21:05",
+ "eseguito_il": "2026-11-15T21:41",
  "fonti": {
   "ubs": {
    "modalita": "attiva",
-   "lette": 20,
-   "nuove": 10,
-   "doppioni": 10,
+   "lette": 167,
+   "nuove": 61,
+   "doppioni": 106,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "equita": {
    "modalita": "prova",
-   "lette": 7,
-   "nuove": 1,
-   "doppioni": 6,
+   "lette": 262,
+   "nuove": 74,
+   "doppioni": 188,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "intesa": {
+   "modalita": "attiva",
+   "lette": 412720,
+   "nuove": 2177,
+   "doppioni": 342820,
+   "quarantena": 1053,
+   "conflitti": 66670,
+   "errore": "tempo massimo raggiunto: dati parziali"
+  },
+  "4trading": {
    "modalita": "prova",
-   "lette": 539,
-   "nuove": 444,
-   "doppioni": 95,
+   "lette": 478,
+   "nuove": 42,
+   "doppioni": 436,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "soldionline": {
    "modalita": "attiva",
-   "lette": 223,
-   "nuove": 0,
-   "doppioni": 219,
-   "quarantena": 2,
-   "conflitti": 2,
-   "errore": ""
-  },
-  "4trading": {
-   "modalita": "prova",
-   "lette": 0,
-   "nuove": 0,
-   "doppioni": 0,
-   "quarantena": 0,
-   "conflitti": 0,
+   "lette": 4557,
+   "nuove": 2664,
+   "doppioni": 1606,
+   "quarantena": 240,
+   "conflitti": 47,
    "errore": ""
   },
   "teleborsa": {
@@ -56,7 +56,20 @@
    "errore": ""
   }
  },
- "nuove_totali": 10,
- "emittenti_nuovi": [],
- "non_riconosciuti": 20175
+ "nuove_totali": 4902,
+ "emittenti_nuovi": [
+  "Banca IMI",
+  "Bank of America ML",
+  "Centrobanca",
+  "Cheuvreux",
+  "Credit Suisse",
+  "Exane",
+  "Fidentiis",
+  "NatIxis",
+  "Nomura",
+  "SociÃ©tÃ© GÃ©nÃ©rale",
+  "Société Générale",
+  "Ubi Banca"
+ ],
+ "non_riconosciuti": 688
 }
