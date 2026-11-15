@@ -20,7 +20,14 @@ def _mappa_pagine(ana):
         if not html:
             continue
         pagine_ok += 1
-        for href, testo in re.findall(r'<a[^>]+href=["\']([^"\']*\d+_\d+_new\.html)["\'][^>]*>(.*?)</a>', html, flags=re.S):
+        if lettera in 'E0':   # diagnostica: cosa riceviamo davvero dal server
+            n_a = len(re.findall(r'<a\b', html))
+            hrefs = re.findall(r'href=["\']([^"\']+)["\']', html)[:4]
+            visibile = c.pulisci(re.sub(r'(?s)<[^>]+>', ' ', re.sub(r'(?is)<(script|style).*?</\1>', ' ', html)))[:200]
+            print(f'    ubs diag [{lettera}]: {len(html)} caratteri, {n_a} tag <a>, {html.count("_new.html")} occorrenze di _new.html')
+            print(f'    ubs diag href: {hrefs}')
+            print(f'    ubs diag testo: {visibile}')
+        for href, testo in re.findall(r'<a\b[^>]*?href=["\']?([^"\'\s>]*\d+_\d+_new\.html)["\']?[^>]*>(.*?)</a>', html, flags=re.S):
             link += 1
             nome = c.pulisci(re.sub(r'<[^>]+>', ' ', htmllib.unescape(testo))).rstrip('* ')
             tk = ana.ticker(nome, 'ubs-indice')
