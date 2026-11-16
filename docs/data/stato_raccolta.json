@@ -1,5 +1,5 @@
 {
- "eseguito_il": "2026-11-15T22:39",
+ "eseguito_il": "2026-11-16T02:41",
  "fonti": {
   "ubs": {
    "modalita": "attiva",
@@ -11,7 +11,7 @@
    "errore": ""
   },
   "equita": {
-   "modalita": "prova",
+   "modalita": "attiva",
    "lette": 19,
    "nuove": 3,
    "doppioni": 16,
@@ -20,7 +20,7 @@
    "errore": ""
   },
   "intesa": {
-   "modalita": "prova",
+   "modalita": "attiva",
    "lette": 34,
    "nuove": 5,
    "doppioni": 29,
@@ -31,19 +31,19 @@
   "4trading": {
    "modalita": "attiva",
    "lette": 121,
-   "nuove": 35,
-   "doppioni": 86,
+   "nuove": 0,
+   "doppioni": 121,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "soldionline": {
    "modalita": "attiva",
-   "lette": 248,
+   "lette": 222,
    "nuove": 0,
-   "doppioni": 246,
+   "doppioni": 222,
    "quarantena": 0,
-   "conflitti": 2,
+   "conflitti": 0,
    "errore": ""
   },
   "teleborsa": {
@@ -56,10 +56,7 @@
    "errore": ""
   }
  },
- "nuove_totali": 35,
- "emittenti_nuovi": [
-  "Barcalys",
-  "Np Morgan"
- ],
- "non_riconosciuti": 12
+ "nuove_totali": 8,
+ "emittenti_nuovi": [],
+ "non_riconosciuti": 10
 }

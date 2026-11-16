@@ -433,6 +433,7 @@ AZM,2025-07-09,Mediobanca,Outperform,
 AZM,2025-07-01,Akros,Buy,31.0
 BAMI,2026-11-13,Ubs,Neutral,14.1
 BAMI,2026-11-12,Morgan Stanley,Equalweight,15.0
+BAMI,2026-11-06,Intesa SanPaolo,Buy,15.6
 BAMI,2026-11-06,Barcalys,Overweight,15.8
 BAMI,2026-11-06,Barclays,Overweight,15.8
 BAMI,2026-11-06,Jefferies,Hold,15.3
@@ -1328,6 +1329,7 @@ BSS,2020-10-08,Akros,Accumulate,17.7
 BSS,2020-08-05,Intesa SanPaolo,Buy,14.5
 BSS,2020-05-13,Banca IMI,Buy,12.0
 BSS,2020-02-26,Banca IMI,Hold,15.0
+BST,2026-11-12,Intesa SanPaolo,Buy,1.8
 BST,2026-08-11,Intermonte,Outperform,1.85
 BST,2025-11-26,Intesa SanPaolo,Buy,2.0
 BST,2025-08-27,Intesa SanPaolo,Neutral,1.94
@@ -1422,6 +1424,7 @@ CE,2025-07-11,Intesa SanPaolo,Buy,12.7
 CE,2025-07-11,Mediobanca,Neutral,
 CE,2025-07-08,Akros,Neutral,12.1
 CE,2025-07-02,Deutsche Bank,Buy,14.3
+CELL,2026-11-09,Intesa SanPaolo,Buy,3.9
 CELL,2025-10-02,Intesa SanPaolo,Buy,4.1
 CELL,2025-09-18,Intesa SanPaolo,Buy,4.1
 CELL,2025-09-18,Mediobanca,Neutral,3.0
@@ -1859,6 +1862,8 @@ DIB,2026-03-10,Tp Icap,Buy,17.0
 DIB,2025-10-20,Akros,Neutral,17.0
 DIB,2025-07-24,Akros,Neutral,17.0
 DIB,2025-07-22,Akros,Neutral,17.0
+DIS,2026-11-06,Equita,BUY,10.6
+DIS,2026-11-02,Equita,BUY,10.5
 DIS,2026-08-11,Equita,Buy,8.8
 DIS,2026-08-06,Intesa SanPaolo,Buy,8.8
 DIS,2026-06-16,Equita,Buy,8.8
@@ -7008,6 +7013,7 @@ TES,2025-07-15,Mediobanca,Neutral,
 TFIN,2026-06-04,Alantra,Buy,10.0
 TFIN,2025-10-31,Kepler cheuvreux,Hold,0.42
 TFIN,2025-08-11,Alantra,Buy,0.6
+TGYM,2026-11-12,Intesa SanPaolo,Buy,17.0
 TGYM,2026-11-05,Citi,Buy,17.0
 TGYM,2026-10-29,Equita,Buy,18.0
 TGYM,2026-08-05,Ubs,Buy,21.3
@@ -7180,6 +7186,7 @@ TNXT,2025-07-21,Equita,Hold,10.0
 TNXT,2025-07-21,Intesa SanPaolo,Buy,17.5
 TNXT,2025-07-21,Mediobanca,Neutral,
 TNXT,2025-07-18,Akros,Buy,13.0
+TPRO,2026-11-12,Intesa SanPaolo,Buy,42.0
 TPRO,2026-11-12,Np Morgan,,38.0
 TPRO,2026-11-12,Deutsche Bank,Buy,45.0
 TPRO,2026-11-12,Jp Morgan,Overweight,38.0
@@ -7551,6 +7558,7 @@ UD,2024-02-20,EnVent,Outperform,6.6
 UD,2024-02-14,MidCap Partners,Buy,6.0
 UD,2024-01-16,MidCap Partners,Buy,6.0
 UD,2023-12-19,Akros,Buy,6.0
+UNI,2026-11-04,Equita,BUY,29.0
 UNI,2026-08-18,Barclays,Overweight,32.0
 UNI,2026-08-11,Berenberg,Buy,33.5
 UNI,2026-08-07,Equita,Buy,24.5
