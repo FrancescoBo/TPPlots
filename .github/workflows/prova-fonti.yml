@@ -1,0 +1,33 @@
+name: Prova fonti storiche
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prova-fonti
+  cancel-in-progress: false
+
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installa le dipendenze
+        run: pip install -r requirements.txt requests openpyxl xlrd lxml
+      - name: Prova le fonti
+        run: python storico/prova_fonti.py
+      - name: Salva l'esito
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data/storico
+          git diff --cached --quiet || git commit -m "Prova fonti storiche $(date +%F)"
+          git pull --rebase origin "${GITHUB_REF_NAME}" && git push
