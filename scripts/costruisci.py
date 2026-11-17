@@ -26,6 +26,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comune import ROOT, MIN_TARGET_ANNO, titoli_selezionati
+FINESTRA_CONTEGGIO = 365   # giorni: oltre questa età l'ultimo giudizio di un emittente esce dai conteggi Buy/OW/Neu/UW/Sell
 VALIDITA_TP = 120          # giorni oltre i quali un target non conta piu' nel TP medio
 FINESTRA_GRAFICO = 365     # giorni mostrati di default nei grafici
 STORICO_TP_MEDIO = 730     # giorni per cui calcolare la serie del TP medio
@@ -83,7 +84,7 @@ def tp_medio(r_target, giorno):
 
 def analizza(t, rac, oggi):
     tk = t.ticker
-    prezzi = pd.read_csv(ROOT / f'data/prezzi/{tk}.csv', parse_dates=['data']).dropna().sort_values('data')
+    prezzi = pd.read_csv(ROOT / f'data/prezzi/{tk}.csv', parse_dates=['data']).dropna(subset=['chiusura']).sort_values('data')
     r = rac[rac.ticker == tk].copy()
     r = r.sort_values('data', ascending=False, kind='stable')
     r_target = r.dropna(subset=['target'])
@@ -127,7 +128,8 @@ def analizza(t, rac, oggi):
                           'target_valido': bool(valido), 'n_raccomandazioni': int(n_rac[x.emittente])})
     tp, n_tp = tp_medio(r_target, oggi)
     prezzo = s.iloc[-1]
-    conteggi = {c: int((ult.classe == c).sum()) for c in CLASSI}
+    recenti = ult[(oggi - ult.data).dt.days <= FINESTRA_CONTEGGIO]     # un giudizio più vecchio di un anno non conta
+    conteggi = {c: int((recenti.classe == c).sum()) for c in CLASSI}
     azioni = int(t.azioni_circolazione) if not pd.isna(t.azioni_circolazione) else None
 
     recap = {'ticker': tk, 'nome': t.nome, 'settore': t.settore,
@@ -139,7 +141,11 @@ def analizza(t, rac, oggi):
              **conteggi}
     dettaglio = {
         'ticker': tk, 'nome': t.nome,
-        'prezzi': [[d.date().isoformat(), num(v)] for d, v in s.items()],
+        # [data, chiusura] oppure [data, chiusura, minimo, massimo] se il titolo ha min/max giornalieri (config/minmax.csv)
+        'prezzi': ([[d.date().isoformat(), num(v), num(lo), num(hi)] for (d, v), lo, hi in zip(s.items(), prezzi.minimo, prezzi.massimo)]
+                   if 'minimo' in prezzi and prezzi.minimo.notna().any() else
+                   [[d.date().isoformat(), num(v)] for d, v in s.items()]),
+        'minmax': bool('minimo' in prezzi and prezzi.minimo.notna().any()),
         'tp_medio': serie,
         'raccomandazioni': [{'data': x.data.date().isoformat(), 'emittente': x.emittente,
                              'raccomandazione': x.raccomandazione,

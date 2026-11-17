@@ -22,7 +22,8 @@
   <section id="vista-recap">
     <div class="card">
       <h2>Recap</h2>
-      <p class="nota">Clicca su un titolo per il dettaglio. Clicca sulle intestazioni per ordinare.</p>
+      <p class="nota">Clicca su un titolo per il dettaglio. Clicca sulle intestazioni per ordinare (le barre ordinano per numero di Buy, poi Overweight). Barre: ultima raccomandazione di ciascun emittente.</p>
+      <div class="leg" id="leg-rac"></div>
       <div class="scroll"><table id="tab-recap"></table></div>
     </div>
     <div class="card">
@@ -30,17 +31,13 @@
       <p class="nota">Pieni ed etichettati = frontiera di Pareto (nessun titolo con capitalizzazione e potenziale entrambi maggiori). Clicca su un punto per il dettaglio.</p>
       <div id="g-pareto" class="grafico alto"></div>
     </div>
-    <div class="card">
-      <h2>Raccomandazioni correnti per titolo</h2>
-      <p class="nota">Ultima raccomandazione di ciascun emittente</p>
-      <div id="g-conteggi"></div>
-    </div>
   </section>
 
   <section id="vista-titolo" hidden>
     <div class="card">
       <div class="barra">
         <label>Titolo <select id="sel-titolo"></select></label>
+        <label class="mm" id="lab-mm" hidden><input type="checkbox" id="chk-mm" checked> Min/max giornalieri</label>
         <div class="periodi" id="periodi">
           <button data-g="182">6 mesi</button>
           <button data-g="365" class="attivo">1 anno</button>

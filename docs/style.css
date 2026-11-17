@@ -16,6 +16,7 @@
   --c-neutral: #b9b8ae;
   --c-uw: #ee9a96;
   --c-sell: #c63a39;
+  --tx-buy: #fff; --tx-ow: #0b0b0b; --tx-neutral: #0b0b0b; --tx-uw: #0b0b0b; --tx-sell: #fff;
   --pos: #006300;
   --neg: #c63a39;
   --accent-bg: rgba(42,120,214,0.10);
@@ -43,6 +44,7 @@
     --c-neutral: #5a5a56;
     --c-uw: #8a3534;
     --c-sell: #e66767;
+    --tx-buy: #0b0b0b; --tx-ow: #fff; --tx-neutral: #fff; --tx-uw: #fff; --tx-sell: #0b0b0b;
     --pos: #0ca30c;
     --neg: #e66767;
     --accent-bg: rgba(57,135,229,0.16);
@@ -91,4 +93,13 @@ select { font: inherit; padding: 5px 8px; border-radius: 6px; border: 1px solid 
 .kpi b { font-size: 20px; font-weight: 600; }
 details summary { cursor: pointer; }
 footer { color: var(--text-muted); font-size: 12px; margin-top: 8px; }
-td.settore, td.nome { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+.nm { display: inline-block; max-width: 190px; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+td.nome { width: 1%; }
+.tk { color: var(--text-muted); }
+.leg { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--text-secondary); margin: 0 0 8px; }
+.leg span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; background: var(--pc); vertical-align: -1px; }
+td.rac { padding-top: 3px; padding-bottom: 3px; }
+.rb { display: inline-flex; gap: 2px; vertical-align: middle; }
+.rb i { display: inline-block; height: 16px; border-radius: 3px; background: var(--pc); color: var(--tc); font: normal 600 10.5px/16px system-ui, sans-serif; text-align: center; overflow: hidden; }
+label.mm { font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+label.mm input { vertical-align: -2px; margin-right: 4px; }

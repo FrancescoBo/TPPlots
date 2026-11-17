@@ -16,6 +16,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comune import ROOT, titoli_selezionati
 
 
+def titoli_minmax():
+    """Ticker per cui salvare anche minimo e massimo giornalieri (elenco in config/minmax.csv, colonna 'ticker'; 'tutti' = tutti)."""
+    p = ROOT / 'config/minmax.csv'
+    if not p.exists():
+        return set()
+    return set(pd.read_csv(p, dtype=str).fillna('').ticker.str.strip()) - {''}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--tutti', action='store_true')
@@ -25,10 +33,13 @@ def main():
     cfg = pd.read_csv(cfg_path, dtype=str).fillna('')
     titoli = cfg if a.tutti else cfg[cfg.ticker.isin(titoli_selezionati().ticker)]
     errori = 0
+    mm = titoli_minmax()
     for t in titoli.itertuples():
         f = ROOT / f'data/prezzi/{t.ticker}.csv'
         old = pd.read_csv(f, parse_dates=['data']) if f.exists() else pd.DataFrame({'data': pd.to_datetime([]), 'chiusura': []})
-        start = pd.Timestamp(a.da) if a.da else (old.data.max() - pd.Timedelta(days=10) if len(old) else pd.Timestamp('2025-01-01'))
+        vuole_mm = 'tutti' in mm or t.ticker in mm
+        manca_mm = vuole_mm and ('minimo' not in old or old.minimo.notna().sum() < 0.9 * old.chiusura.notna().sum())   # primo giro: riscarica tutto lo storico con min/max
+        start = pd.Timestamp(a.da) if a.da else (old.data.max() - pd.Timedelta(days=10) if len(old) and not manca_mm else pd.Timestamp('2025-01-01'))
         yt = yf.Ticker(t.simbolo_yahoo)
         try:
             h = yt.history(start=start.date().isoformat(), interval='1d', auto_adjust=False)
@@ -37,6 +48,9 @@ def main():
         if h.empty:
             print(f'! {t.ticker} ({t.simbolo_yahoo}): nessun dato'); errori += 1; continue
         new = pd.DataFrame({'data': pd.to_datetime(h.index.tz_localize(None).date), 'chiusura': h.Close.round(4).values})
+        if vuole_mm:
+            new['minimo'] = h.Low.round(4).values
+            new['massimo'] = h.High.round(4).values
         out = pd.concat([old[~old.data.isin(new.data)], new]).sort_values('data')
         out['data'] = out.data.dt.date.astype(str)
         out.to_csv(f, index=False)

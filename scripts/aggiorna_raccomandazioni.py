@@ -24,6 +24,7 @@ from raccolta import equita, intesa, quattro_trading, soldionline, teleborsa, ub
 ROOT = c.ROOT
 FINESTRA_DOPPIONI = 4      # giorni
 SOLO_VARIAZIONI = {'intesa'}   # fonti che ripetono giudizio e target a ogni pubblicazione: si tiene solo ciò che cambia
+DATA_MINIMA = pd.Timestamp('2025-01-01')   # prima di questa data non si importa nulla (le quotazioni partono da lì)
 MINUTI_PER_FONTE = 12      # tempo massimo per ogni fonte
 SCARTO_MAX = 4.0           # un target fuori da [1/4, 4] volte la mediana storica del titolo va in quarantena
 
@@ -125,7 +126,7 @@ def main():
             info['errore'] = traceback.format_exc(limit=2).strip().splitlines()[-1]
             print(f'[{f.fonte}] ERRORE: {info["errore"]}')
             continue
-        d = d[(d.data <= oggi + pd.Timedelta(days=1))] if not d.empty else d
+        d = d[(d.data <= oggi + pd.Timedelta(days=1)) & (d.data >= DATA_MINIMA)] if not d.empty else d
         info['lette'] = len(d)
         if time.time() > c.SCADENZA[0]:
             info['errore'] = 'tempo massimo raggiunto: dati parziali'

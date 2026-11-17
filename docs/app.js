@@ -14,6 +14,9 @@
   const fmld = v => v == null ? '–' : (v / 1e9).toLocaleString('it-IT', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
   const fd = s => s ? s.split('-').reverse().join('/') : '–';
   const segno = v => v == null ? '' : v >= 0 ? 'pos' : 'neg';
+  const nomeBreve = n => (n || '').replace(/\s*[-,]?\s*SOCIET[ÀA]'?\s+PER\s+AZIONI.*$/i, '').replace(/\s+(S\.?\s?P\.?\s?A\.?|N\.?\s?V\.?|S\.A\.|SA|SE)$/i, '').replace(/\s*[-–,]\s*$/, '').replace(/\s+'\s+/, "' ").trim();
+  const etichetta = x => `${nomeBreve(x.nome)} (${x.ticker})`;
+  const SIGLA = { Buy: 'Buy', Overweight: 'Overweight', Neutral: 'Neutral', Underweight: 'Underweight', Sell: 'Sell' };
   const pill = c => c ? `<span class="pill" style="--pc:${COL_CL()[c]}">${c}</span>` : '';
 
   $('#info').textContent = `Aggiornato al ${fd(D.data_riferimento)} · ${D.recap.length} titoli · ` +
@@ -52,29 +55,28 @@
   }
 
   /* ---------- RECAP ---------- */
+  const maxTot = Math.max(1, ...D.recap.map(x => CL.reduce((a, c) => a + x[c], 0)));
+  const PX = Math.min(7, 170 / maxTot);          // larghezza in pixel di un emittente nella barra
+  const barra = x => {
+    const col = COL_CL(), tit = CL.map(c => `${c}: ${x[c]}`).join(' · ');
+    return `<span class="rb" title="${tit}">` + CL.filter(c => x[c] > 0).map(c => {
+      const w = Math.max(x[c] * PX, 4);
+      return `<i style="width:${w}px;--pc:${col[c]};--tc:var(--tx-${{Buy:'buy',Overweight:'ow',Neutral:'neutral',Underweight:'uw',Sell:'sell'}[c]})">${w >= 15 ? x[c] : ''}</i>`;
+    }).join('') + '</span>';
+  };
+  $('#leg-rac').innerHTML = CL.map(c => `<span style="--pc:${COL_CL()[c]}">${c}</span>`).join('');
   tabella($('#tab-recap'), [
-    { k: 'ticker', h: 'Ticker', t: 1, f: x => `<b>${x.ticker}</b>` },
-    { k: 'nome', h: 'Nome', t: 1, cls: () => 'nome' },
-    { k: 'settore', h: 'Settore', t: 1, cls: () => 'muted settore' },
+    { k: 'nome', h: 'Titolo', t: 1, cls: () => 'nome', f: x => `<span title="${x.nome}"><span class="nm">${nomeBreve(x.nome)}</span> <span class="tk">(${x.ticker})</span></span>` },
     { k: 'capitalizzazione', h: 'Cap. (mld €)', f: x => fmld(x.capitalizzazione) },
     { k: 'prezzo', h: 'Prezzo', f: x => f2(x.prezzo) },
     { k: 'tp_medio', h: 'TP medio', f: x => f2(x.tp_medio) },
     { k: 'n_target_validi', h: 'N. target' },
     { k: 'delta_tp', h: 'Delta TP', f: x => fp(x.delta_tp), cls: x => segno(x.delta_tp) },
-    ...CL.map(c => ({ k: c, h: { Buy: 'Buy', Overweight: 'OW', Neutral: 'Neu', Underweight: 'UW', Sell: 'Sell' }[c] })),
+    { k: 'rac', h: 'Raccomandazioni', t: 1, f: barra, cls: () => 'rac', v: x => x.Buy * 1000 + x.Overweight },
     { k: 'ultima_raccomandazione', h: 'Ultima rac.', f: x => fd(x.ultima_raccomandazione) },
-    { k: 'pareto', h: 'Pareto?', t: 1, f: x => x.pareto === 'Pareto' ? '<b>Pareto</b>' : (x.pareto || '–') },
-  ], D.recap, { ord: 'Buy', clic: tk => apriTitolo(tk), id: x => x.ticker });
+  ], D.recap, { ord: 'rac', clic: tk => apriTitolo(tk), id: x => x.ticker });
 
   function graficiRecap() {
-    const r = [...D.recap].sort((a, b) => (a.Buy + a.Overweight) - (b.Buy + b.Overweight));
-    const col = COL_CL();
-    Plotly.react('g-conteggi', CL.map(c => ({
-      type: 'bar', orientation: 'h', name: c, y: r.map(x => x.ticker), x: r.map(x => x[c]),
-      marker: { color: col[c], line: { color: css('--surface-1'), width: 2 } },
-      hovertemplate: `%{y} · ${c}: %{x}<extra></extra>`,
-    })), layoutBase({ height: Math.max(380, 90 + 20 * r.length), barmode: 'stack', bargap: 0.3, xaxis: asse({ title: 'N. emittenti', dtick: 2 }), yaxis: asse({ automargin: true, tickfont: { size: 11, color: css('--text-secondary') } }), margin: { l: 64, r: 16, t: 36, b: 48 } }), cfg);
-
     const ok = D.recap.filter(x => x.capitalizzazione && x.delta_tp != null);
     const tr = (sel, nome, pieno) => ({
       type: 'scatter', mode: pieno ? 'markers+text' : 'markers', name: nome,
@@ -91,9 +93,10 @@
 
   /* ---------- DETTAGLIO TITOLO ---------- */
   const sel = $('#sel-titolo');
-  sel.innerHTML = D.recap.map(x => `<option value="${x.ticker}">${x.ticker} – ${x.nome}</option>`).join('');
+  sel.innerHTML = D.recap.map(x => `<option value="${x.ticker}">${etichetta(x)}</option>`).join('');
   sel.onchange = () => disegnaTitolo(sel.value);
-  let giorni = 365, corrente = D.recap[0]?.ticker;
+  let giorni = 365, corrente = D.recap[0]?.ticker, mostraMM = true;
+  $('#chk-mm').onchange = e => { mostraMM = e.target.checked; disegnaTitolo(corrente); };
   document.querySelectorAll('#periodi button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#periodi button').forEach(x => x.classList.toggle('attivo', x === b));
     giorni = +b.dataset.g; disegnaTitolo(corrente);
@@ -114,12 +117,18 @@
       ['Buy / OW / Neu / UW / Sell', CL.map(c => R[c]).join(' / ')],
     ].map(([a, b]) => `<div><span>${a}</span><b>${b}</b></div>`).join('');
 
+    $('#lab-mm').hidden = !T.minmax;
     const P = T.prezzi.filter(p => dentro(p[0]));
+    const conMM = T.minmax && mostraMM;
+    const lineaMM = (nome, i) => ({ type: 'scatter', mode: 'lines', name: nome, x: P.map(p => p[0]), y: P.map(p => p[i]), connectgaps: false,
+      line: { color: css('--series-1'), width: 1.3, dash: 'dash' }, opacity: 0.85,
+      hovertemplate: `${nome} %{y:.2f}<extra></extra>` });
     const M = T.tp_medio.filter(p => dentro(p[0]));
     const Rc = T.raccomandazioni.filter(r => r.target != null && dentro(r.data));
     Plotly.react('g-titolo', [
       { type: 'scatter', mode: 'lines', name: 'Prezzo', x: P.map(p => p[0]), y: P.map(p => p[1]),
         line: { color: css('--series-1'), width: 2 }, hovertemplate: '%{x|%d/%m/%Y}<br>Prezzo %{y:.2f}<extra></extra>' },
+      ...(conMM ? [lineaMM('Massimo giornaliero', 3), lineaMM('Minimo giornaliero', 2)] : []),
       { type: 'scatter', mode: 'lines', name: 'TP medio', x: M.map(p => p[0]), y: M.map(p => p[1]), customdata: M.map(p => p[2]),
         line: { color: css('--series-2'), width: 2, shape: 'hv' }, connectgaps: false,
         hovertemplate: 'TP medio %{y:.2f} (%{customdata} emittenti)<extra></extra>' },
