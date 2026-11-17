@@ -1,4 +1,7 @@
-"""Fase 2: buy-and-hold FTSE MIB e top-5 potenziale al 2025-09-01 (dati fino al 2026-04-30)."""
+"""NOTA: scritto per il motore delle fasi 1-3 (slittamento per capitalizzazione). Con il motore attuale il terzo
+argomento di Simulatore e' la liquidita'; i termini di confronto aggiornati sono in riferimenti.py ed esperimenti.py.
+
+Fase 2: buy-and-hold FTSE MIB e top-5 potenziale al 2025-09-01 (dati fino al 2026-04-30)."""
 import json
 import sys
 from pathlib import Path

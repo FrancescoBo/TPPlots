@@ -121,6 +121,7 @@ def carica_raccomandazioni(prezzi: Prezzi, fine: pd.Timestamp = DATA_FINE):
     _, rac = costruisci.carica(fine)
     rac = rac[rac.data <= fine].copy()
     rac['ordine'] = np.arange(len(rac))
+    rac = rimuovi_duplicati(rac)        # DECISIONI_FASE3: via le righe duplicate prima di calcolare i segnali
     rac = rac.drop(columns=['target_prec', 'variazione'])          # si ricalcolano dopo le esclusioni
     cf = prezzi.chiusura
     prezzo_rif = []
@@ -138,6 +139,15 @@ def carica_raccomandazioni(prezzi: Prezzi, fine: pd.Timestamp = DATA_FINE):
     rac = rac[~rac.escluso].copy()
     rac = ricalcola_variazioni(rac)
     return rac.reset_index(drop=True), esclusi.reset_index(drop=True)
+
+
+CHIAVE_DUPLICATI = ['ticker', 'data', 'emittente', 'raccomandazione', 'target']
+
+
+def rimuovi_duplicati(rac: pd.DataFrame) -> pd.DataFrame:
+    """Toglie le righe identiche per ticker, data, emittente, giudizio e target; tiene la prima del file
+    (colonna `ordine`, se presente, altrimenti l'ordine di riga)."""
+    return rac.drop_duplicates(CHIAVE_DUPLICATI, keep='first').copy()
 
 
 def ricalcola_variazioni(rac: pd.DataFrame) -> pd.DataFrame:

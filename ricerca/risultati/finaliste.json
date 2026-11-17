@@ -1,0 +1,46 @@
+{
+ "1": {
+  "id": 20018,
+  "params": {
+   "id": 20018,
+   "famiglia": "A",
+   "L": 5000000.0,
+   "controllo": "False",
+   "segnale": "COMP",
+   "R": 21,
+   "K": 4,
+   "B": 4,
+   "dim": {
+    "reinvest": true,
+    "inv_atr": false
+   },
+   "regole": {}
+  },
+  "rendimento_netto": 0.3963213423910006,
+  "mediana_casuali_finale": 0.05535566611500031,
+  "ordini_a_settimana": 0.871369294605809,
+  "n_operazioni": 15
+ },
+ "2": {
+  "id": 20010,
+  "params": {
+   "id": 20010,
+   "famiglia": "A",
+   "L": 1000000.0,
+   "controllo": "False",
+   "segnale": "COMP",
+   "R": 21,
+   "K": 6,
+   "B": 0,
+   "dim": {
+    "reinvest": true,
+    "inv_atr": false
+   },
+   "regole": {}
+  },
+  "rendimento_netto": 0.38609886163500073,
+  "mediana_casuali_finale": 0.04827429279600026,
+  "ordini_a_settimana": 1.4522821576763485,
+  "n_operazioni": 25
+ }
+}

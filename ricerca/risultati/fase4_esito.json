@@ -1,0 +1,12 @@
+{
+ "combinazioni": 168,
+ "famiglia_A": 96,
+ "famiglia_B": 72,
+ "ftse_tr_netto": 0.11495453346433226,
+ "ftse_prezzo_netto": 0.09736603284526568,
+ "superano_condizione": 53,
+ "arresto": false,
+ "superano_tutti_i_vincoli": 11,
+ "ultimo_dato": "2026-04-30",
+ "seme": 20260430
+}

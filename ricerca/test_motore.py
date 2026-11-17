@@ -48,7 +48,7 @@ def test_tobin_titolo_italiano_e_ferrari():
 def test_tobin_esenzione_a_date():
     esenti = {'XYZ': [(pd.Timestamp('2025-01-01'), pd.Timestamp('2025-12-31'))]}
     assert M.tobin(5000, 'XYZ', '2025-06-01', esenti) == 0.0
-    assert M.tobin(5000, 'XYZ', '2026-02-01', esenti) == pytest.approx(5.00)   # fuori dalla lista del 2025
+    assert M.tobin(5000, 'XYZ', '2026-02-01', esenti) == pytest.approx(10.00)   # fuori dalla lista del 2025; dal 2026 aliquota 0,2%
 
 
 def test_slittamento_per_capitalizzazione():
@@ -208,9 +208,9 @@ def test_acquisto_costi_tobin_e_vendita_con_tassa_tornano_al_centesimo():
     # atteso: slittamento 0,20% (cap ignota), commissione e Tobin sul valore effettivo
     pe = 10 * 1.002
     n = int(4000 // pe)
-    while n * pe + M.commissione(n * pe) + M.tobin(n * pe, 'AAA') > 4000:
+    while n * pe + M.commissione(n * pe) + M.tobin(n * pe, 'AAA', p.calendario[1]) > 4000:
         n -= 1
-    costo = n * pe + M.commissione(n * pe) + M.tobin(n * pe, 'AAA')
+    costo = n * pe + M.commissione(n * pe) + M.tobin(n * pe, 'AAA', p.calendario[1])
     pv = 12 * 0.998
     incasso = n * pv - M.commissione(n * pv)
     tassa = round(0.26 * (incasso - costo), 2)
@@ -220,7 +220,7 @@ def test_acquisto_costi_tobin_e_vendita_con_tassa_tornano_al_centesimo():
     assert t.tassa == pytest.approx(tassa, abs=0.011)
     assert sim.cash == pytest.approx(atteso, abs=0.011)
     assert res.equity.iloc[-1] == pytest.approx(atteso, abs=0.011)
-    assert t.tobin == pytest.approx(M.tobin(n * pe, 'AAA'))
+    assert t.tobin == pytest.approx(M.tobin(n * pe, 'AAA', p.calendario[1]))
     # identita': patrimonio finale = capitale + somma dei risultati netti dei trade
     assert sim.cash == pytest.approx(20000 + res.trades.risultato_netto.sum(), abs=0.011)
 
@@ -405,3 +405,169 @@ def test_tobin_esenti_csv_ferrari_si_a2a_no():
     import dati as D
     e = D.carica_tobin_esenti()
     assert 'RACE' in e and 'A2A' not in e
+
+
+# ============================================================ regole di DECISIONI_FASE3
+def test_tobin_01_fino_al_2025_e_02_dal_2026():
+    assert M.aliquota_tobin('2025-12-31') == 0.001
+    assert M.aliquota_tobin('2026-01-01') == 0.002
+    assert M.tobin(10000, 'A2A', '2025-12-31') == pytest.approx(10.0)
+    assert M.tobin(10000, 'A2A', '2026-01-02') == pytest.approx(20.0)
+    assert M.tobin(10000, 'RACE', '2026-01-02', esenti={'RACE'}) == 0.0
+    # sensibilita' 0,4% dal 2026: non tocca il 2025
+    assert M.tobin(10000, 'A2A', '2026-01-02', aliquota=0.004) == pytest.approx(40.0)
+    assert M.aliquota_tobin('2025-06-01', dal_2026=0.004) == 0.001
+
+
+def test_tobin_nel_simulatore_a_cavallo_del_capodanno():
+    # sedute: 29,30,31 dic 2025 e 1(festa),2,5 gen: il 31/12 e' in 2025 (0,1%), il 2/1 in 2026 (0,2%)
+    cal = pd.DatetimeIndex(['2025-12-29', '2025-12-30', '2025-12-31', '2026-01-02', '2026-01-05', '2026-01-06'])
+    mk = lambda v: pd.DataFrame({'AAA': np.array(v, dtype=float)}, index=cal)
+    p = D.Prezzi(cal, mk([10] * 6), mk([10.1] * 6), mk([9.9] * 6), mk([10] * 6), mk([1000] * 6), {}, [])
+    for dec, aliq in ((1, 0.001), (3, 0.002)):          # decisione il 30/12 -> acquisto il 31/12; il 2/1 -> il 5/1
+        sim = M.Simulatore(p, pan_div(p, {}), config=M.Config(liquida_a_fine=False))
+        sim.esegui(CompraAlGiorno(dec, 4000))
+        pz = sim.pos['AAA']
+        assert pz.tobin_in == pytest.approx(M.arrotonda(aliq * pz.azioni * pz.prezzo_eff))
+    sim = M.Simulatore(p, pan_div(p, {}), config=M.Config(liquida_a_fine=False, tobin_dal_2026=0.004))
+    sim.esegui(CompraAlGiorno(3, 4000))
+    assert sim.pos['AAA'].tobin_in == pytest.approx(M.arrotonda(0.004 * sim.pos['AAA'].azioni * sim.pos['AAA'].prezzo_eff))
+
+
+@pytest.mark.parametrize('cv, atteso', [(5e6, 0.0005), (2e7, 0.0005), (4.99e6, 0.0010), (1e6, 0.0010), (9.9e5, 0.0020),
+                                        (0.0, 0.0020), (float('nan'), 0.0020), (None, 0.0020)])
+def test_slittamento_per_liquidita(cv, atteso):
+    assert M.slittamento_liquidita(cv) == atteso
+
+
+def test_pannello_liquidita_mediana_60_sedute_solo_dati_passati():
+    n = 100
+    cal = pd.bdate_range('2025-01-02', periods=n)
+    ch = pd.DataFrame({'AAA': np.full(n, 10.0)}, index=cal)
+    vol = pd.DataFrame({'AAA': np.arange(1, n + 1) * 1000.0}, index=cal)
+    p = D.Prezzi(cal, ch, ch, ch, ch, vol, {}, [])
+    L = M.pannello_liquidita(p)
+    t = 80
+    atteso = np.median(10.0 * vol['AAA'].iloc[t - 59:t + 1])
+    assert L['AAA'].iloc[t] == pytest.approx(atteso)
+    assert np.isnan(L['AAA'].iloc[28])                    # meno di 30 sedute di storia
+    # cambiare i volumi futuri non cambia la mediana di oggi
+    vol2 = vol.copy(); vol2.iloc[t + 1:] = 1e12
+    L2 = M.pannello_liquidita(D.Prezzi(cal, ch, ch, ch, ch, vol2, {}, []))
+    assert L2['AAA'].iloc[t] == L['AAA'].iloc[t]
+
+
+def test_slittamento_del_simulatore_usa_la_liquidita_del_giorno_prima():
+    p = sintetico([10] * 5, [10.1] * 5, [9.9] * 5, [10] * 5)
+    liq = pd.DataFrame({'AAA': [6e6, 6e6, 0.0, 0.0, 0.0]}, index=p.calendario)    # giorno 1 liquido; dal giorno 2 illiquido
+    sim = M.Simulatore(p, pan_div(p, {}), liquidita=liq, config=M.Config(liquida_a_fine=False))
+    sim.esegui(CompraAlGiorno(0, 4000))                  # acquisto nel giorno 1: usa la liquidita' del giorno 0 (6 mln)
+    assert sim.pos['AAA'].prezzo_eff == pytest.approx(10 * 1.0005)
+    sim = M.Simulatore(p, pan_div(p, {}), liquidita=liq, config=M.Config(liquida_a_fine=False))
+    sim.esegui(CompraAlGiorno(2, 4000))                  # acquisto nel giorno 3: usa la liquidita' del giorno 2 (0)
+    assert sim.pos['AAA'].prezzo_eff == pytest.approx(10 * 1.0020)
+    liq2 = pd.DataFrame({'AAA': [2e6] * 5}, index=p.calendario)
+    sim = M.Simulatore(p, pan_div(p, {}), liquidita=liq2, config=M.Config(liquida_a_fine=False))
+    sim.esegui(CompraAlGiorno(0, 4000))
+    assert sim.pos['AAA'].prezzo_eff == pytest.approx(10 * 1.0010)
+
+
+def test_rimozione_righe_duplicate_di_raccomandazioni():
+    r = pd.DataFrame({'ticker': ['A', 'A', 'A', 'B'], 'data': pd.to_datetime(['2025-10-01'] * 3 + ['2025-10-01']),
+                      'emittente': ['X', 'X', 'Y', 'X'], 'raccomandazione': ['Buy'] * 4, 'target': [10.0, 10.0, 10.0, 10.0],
+                      'ordine': [0, 1, 2, 3]})
+    out = D.rimuovi_duplicati(r)
+    assert list(out.ordine) == [0, 2, 3]
+    # sui dati reali non resta nessun duplicato
+    pr = D.carica_prezzi()
+    rac, _ = D.carica_raccomandazioni(pr)
+    assert not rac.duplicated(D.CHIAVE_DUPLICATI).any()
+
+
+def test_ftsemib_con_dividendi_stimati():
+    import riferimenti as RF
+    n = 6
+    cal = pd.bdate_range('2026-01-05', periods=n)
+    ix = pd.DataFrame({'apertura': [100.0] * n, 'massimo': [101.0] * n, 'minimo': [99.0] * n, 'chiusura': [100.0] * n}, index=cal)
+    y = pd.Series([0, 0, 0.0, 0.0, 0.01, 0.0], index=cal)          # 1% di dividendo lordo il giorno 4
+    # lordo: niente costi, dividendi al 100%, nessuna tassa: 20000 * 1% = 200
+    g = RF.ftsemib_bh(ix, y, 0, n - 1, lordo=True)
+    assert g['patrimonio_finale'] == pytest.approx(20200.0)
+    # netto: dividendo al 74%, commissioni 2 x 6,40+..., slittamento 0,05% per lato, tassa sulla sola plusvalenza di prezzo (negativa: nessuna)
+    f = RF.ftsemib_bh(ix, y, 0, n - 1)
+    v0 = (20000 - 6.40 + 0.0024 * 1460) / 1.0024
+    unita = v0 / (100 * 1.0005)
+    div = unita * 0.01 * 100 * 0.74
+    v1 = unita * 100 * 0.9995
+    atteso = 20000 - v0 - M.commissione(v0) + v1 - M.commissione(v1) + div
+    assert f['patrimonio_finale'] == pytest.approx(atteso, rel=1e-9)
+    assert f['tassa'] == 0.0                                       # perdita di prezzo per i costi: nessuna imposta
+    # senza dividendi e' piu' basso
+    assert RF.ftsemib_bh(ix, y, 0, n - 1, con_dividendi=False)['patrimonio_finale'] == pytest.approx(atteso - div, rel=1e-9)
+
+
+@pytest.fixture(scope='module')
+def mercato():
+    import strategie as ST
+    return ST.Mercato()
+
+
+def test_strategie_casuali_stesso_calendario_e_filtro_di_liquidita(mercato):
+    import strategie as ST
+    mk = mercato
+    L = 5e6
+    reale = mk.sim().esegui(ST.Rotazione(mk, 'MOM', 10, 5, 0, L), inizio=mk.idec, fine=mk.i1)
+    tr = reale.trades
+    piano = ST.piano_da_trades(tr)
+    assert sum(len(v) for v in piano.values()) == len(tr)
+    runs = []
+    for seme in (1, 1, 2):
+        sim = mk.sim()
+        sim.esegui(ST.Casuale(mk, L, piano, ST.Regole(), np.random.default_rng(seme)), inizio=mk.idec, fine=mk.i1)
+        runs.append(sim)
+    # stesso seme -> stessi trade; seme diverso -> titoli diversi
+    tk = lambda sim: [x['ticker'] for x in sim.trades]
+    assert tk(runs[0]) == tk(runs[1])
+    assert tk(runs[0]) != tk(runs[2])
+    for sim in runs:
+        t = pd.DataFrame(sim.trades)
+        assert len(t) == len(tr)                                           # stesso numero di operazioni
+        assert sorted(t.i_ingresso) == sorted(tr.i_ingresso)               # stesse date di ingresso
+        # uscite 'strategia' alle stesse date della strategia reale
+        assert sorted(t.i_uscita) == sorted(tr.i_uscita)
+        # tutti i titoli scelti passano l'universo e il filtro di liquidita' il giorno della decisione
+        for r in t.itertuples():
+            k = mk.col[r.ticker]
+            assert mk.elig[L][r.i_ingresso - 1, k]
+            assert mk.cx.liq[r.i_ingresso - 1, k] >= L
+
+
+def test_rotazione_e_eventi_senza_sguardi_al_futuro(mercato):
+    import strategie as ST
+    mk = mercato
+    R, K = 10, 5
+    r = mk.sim().esegui(ST.Rotazione(mk, 'COMP', R, K, 0, 1e6), inizio=mk.idec, fine=mk.i1)
+    t = r.trades
+    assert (t.i_ingresso >= mk.i0).all()                                   # primo acquisto: apertura del 1/9/2025
+    assert ((t.i_ingresso - 1 - mk.idec) % R == 0).all()                   # solo nei giorni di ribilanciamento + 1
+    for x in t.itertuples():
+        assert mk.elig[1e6][x.i_ingresso - 1, mk.col[x.ticker]]
+        assert not np.isnan(mk.comp[1e6][x.i_ingresso - 1, mk.col[x.ticker]])
+    e = mk.sim().esegui(ST.Eventi(mk, 'ALZ5', 'MOM>0', 5, 1e6, ST.Regole(tempo=60, stop=0.12)), inizio=mk.idec, fine=mk.i1)
+    for x in e.trades.itertuples():
+        k = mk.col[x.ticker]
+        assert mk.eventi['ALZ5'][x.i_ingresso - 1, k] and mk.seg['MOM'][x.i_ingresso - 1, k] > 0   # evento e filtro in t, acquisto in t+1
+        assert x.sedute <= 60
+    assert (e.trades.motivo.isin(['stop', 'tempo', 'liquidazione_finale'])).all()
+
+
+def test_il_segnale_composito_usa_ranghi_percentuali_dello_stesso_giorno(mercato):
+    mk = mercato
+    L = 1e6
+    t = mk.idec + 20
+    ok = mk.elig[L][t] & ~np.isnan(mk.seg['MOM'][t]) & ~np.isnan(mk.seg['REV'][t])
+    k = np.flatnonzero(ok)
+    rm = pd.Series(mk.seg['MOM'][t, k]).rank(pct=True).values
+    rr = pd.Series(mk.seg['REV'][t, k]).rank(pct=True).values
+    assert np.allclose(mk.comp[L][t, k], (rm + rr) / 2)
+    assert np.isnan(mk.comp[L][t, ~ok]).all()
