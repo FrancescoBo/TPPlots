@@ -1,0 +1,156 @@
+{
+ "ultimo_dato": "2026-04-30",
+ "target_fuori_0.3_3": [
+  {
+   "ticker": "PMT",
+   "data": "2025-08-04",
+   "emittente": "Integrae Sim",
+   "target": 7.5,
+   "prezzo_rif": 2.12,
+   "ratio": 3.538
+  },
+  {
+   "ticker": "PRE",
+   "data": "2025-03-12",
+   "emittente": "Integrae Sim",
+   "target": 1.9,
+   "prezzo_rif": 0.502,
+   "ratio": 3.785
+  },
+  {
+   "ticker": "PRO",
+   "data": "2026-04-14",
+   "emittente": "Intesa SanPaolo",
+   "target": 0.35,
+   "prezzo_rif": 1.75,
+   "ratio": 0.2
+  },
+  {
+   "ticker": "SIAV",
+   "data": "2025-05-07",
+   "emittente": "Integrae Sim",
+   "target": 6.3,
+   "prezzo_rif": 2.04,
+   "ratio": 3.088
+  },
+  {
+   "ticker": "SIAV",
+   "data": "2025-04-23",
+   "emittente": "Integrae Sim",
+   "target": 6.3,
+   "prezzo_rif": 1.79,
+   "ratio": 3.52
+  },
+  {
+   "ticker": "TFIN",
+   "data": "2025-10-31",
+   "emittente": "Kepler Cheuvreux",
+   "target": 0.42,
+   "prezzo_rif": 8.74,
+   "ratio": 0.048
+  },
+  {
+   "ticker": "TFIN",
+   "data": "2025-08-11",
+   "emittente": "Alantra",
+   "target": 0.6,
+   "prezzo_rif": 8.44,
+   "ratio": 0.071
+  },
+  {
+   "ticker": "YKY",
+   "data": "2025-03-20",
+   "emittente": "KT&Partners",
+   "target": 3.75,
+   "prezzo_rif": 1.0,
+   "ratio": 3.75
+  }
+ ],
+ "titoli_senza_prezzi": [
+  "AIM2",
+  "AIW",
+  "ALA",
+  "ALMS",
+  "AV",
+  "BPSO",
+  "DAL",
+  "DGV",
+  "ETI",
+  "ILTY",
+  "OPTS",
+  "RWY",
+  "TIME",
+  "TITR",
+  "TNXT"
+ ],
+ "righe_prezzo_fuori_calendario": {
+  "EXO": [
+   "2025-08-15",
+   "2025-12-24",
+   "2025-12-31"
+  ]
+ },
+ "titoli_con_prezzi_senza_azioni": 90,
+ "titoli_con_prezzi": 213,
+ "rendimenti_giornalieri_oltre_40pct": [
+  {
+   "ticker": "UBA",
+   "data": "2025-01-06",
+   "rend": 0.487
+  },
+  {
+   "ticker": "ESTM",
+   "data": "2025-02-18",
+   "rend": 0.432
+  },
+  {
+   "ticker": "EGLA",
+   "data": "2025-07-28",
+   "rend": 0.526
+  },
+  {
+   "ticker": "AEF",
+   "data": "2025-10-03",
+   "rend": -0.433
+  },
+  {
+   "ticker": "BFF",
+   "data": "2026-02-02",
+   "rend": -0.443
+  },
+  {
+   "ticker": "EGLA",
+   "data": "2026-02-16",
+   "rend": -0.589
+  },
+  {
+   "ticker": "TISG",
+   "data": "2026-03-16",
+   "rend": -0.471
+  },
+  {
+   "ticker": "BFF",
+   "data": "2026-03-30",
+   "rend": -0.549
+  }
+ ],
+ "righe_rac_valide": 4417,
+ "righe_rac_duplicate_ticker_data_emittente": 27,
+ "righe_senza_classe": 178,
+ "righe_senza_target": 209,
+ "rac_su_ticker_senza_prezzi": 44,
+ "emittenti_distinti": 37,
+ "universo_titoli_per_data": {
+  "2025-08-29": 67,
+  "2025-09-30": 78,
+  "2025-12-30": 80,
+  "2026-04-30": 77
+ },
+ "universo_titoli_distinti_in_sample": 101,
+ "regime_giorni_in_sample": {
+  "1.0": 135,
+  "0.0": 1
+ },
+ "giorni_in_sample": 167,
+ "quota_celle_universo_non_negoziabili": 5.6708631053646363e-05
+}
