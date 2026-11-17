@@ -1,0 +1,29 @@
+Segnale COMP del 2026-11-17 (ultima seduta nei dati; 204 titoli con prezzo quel giorno)
+Filtri: almeno 5 target validi negli ultimi 120 giorni, controvalore mediano 60 sedute >= 1 mln EUR; 67 titoli ammessi con COMP calcolabile
+
+Classifica (prime 15)
+ # ticker                         nome  COMP  MOM120  REV60  mln/giorno  ultimo       
+ 1    DIA              DIASORIN S.P.A. 0.948   0.244  7.000       9.925  81.900 TENERE
+ 2    IOT                  SECO S.P.A. 0.948   0.538  4.000       1.446   4.590 TENERE
+ 3   RACE                 Ferrari N.V. 0.940   0.194 10.000     121.186 363.850 TENERE
+ 4    DLG           DE ' LONGHI S.P.A. 0.940   0.337  4.000       6.035  46.700 TENERE
+ 5   BMED         BANCA MEDIOLANUM SPA 0.903   0.161  6.000      15.058  22.890 TENERE
+ 6    ENI                   ENI S.P.A. 0.896   0.107 18.000     186.034  25.610 TENERE
+ 7    UCG UNICREDIT, SOCIETÀ PER AZION 0.858   0.094  9.000     317.621  81.960       
+ 8    CPR     Davide Campari Milano NV 0.840   0.232  2.000      29.528   6.692       
+ 9    FBK FINECOBANK BANCA FINECO S.P. 0.802   0.100  3.000      34.733  22.640       
+10    SOL                   SOL S.P.A. 0.795   0.149  2.000       2.111  64.600       
+11   NEXI                     NEXI SPA 0.784   0.270  1.000      22.659   4.405       
+12   PIRC          PIRELLI & C. S.P.A. 0.769   0.041  4.000       9.827   6.500       
+13    ISP          INTESA SANPAOLO SPA 0.765   0.077  3.000     258.913   6.190       
+14    UNI  UNIPOL ASSICURAZIONI S.P.A. 0.761   0.229  1.000      34.919  25.680       
+15   ENAV                  ENAV S.P.A. 0.754   0.036  4.000       1.606   5.500       
+
+Oggi NON e' giorno di ribilanciamento: le liste sotto mostrano cosa si farebbe oggi, ma la regola le applica solo il 2026-11-25 (data stimata con il calendario di Borsa Italiana), ordini all'apertura della seduta dopo.
+
+Patrimonio di riferimento 20,000.00 EUR -> blocco per titolo 3,333.33 EUR (patrimonio / 6)
+Da tenere (primi 6): DIA, IOT, RACE, DLG, BMED, ENI
+Portafoglio: vuoto
+Da COMPRARE: DIA (~40 azioni a 81.900), IOT (~726 azioni a 4.590), RACE (~9 azioni a 363.850), DLG (~71 azioni a 46.700), BMED (~145 azioni a 22.890), ENI (~130 azioni a 25.610)
+
+Costi e tasse reali (commissione, Tobin 0,2%, slittamento, 26%) non inclusi nelle quantita indicate.

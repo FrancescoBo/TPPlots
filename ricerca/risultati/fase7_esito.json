@@ -1,0 +1,50 @@
+{
+ "criterio1": {
+  "supera": false,
+  "finalista2_netto": -0.28920645390099964,
+  "ftse_tr_netto": 0.04895148722163989,
+  "finalista2_guadagno": -5784.129078019992,
+  "ftse_tr_guadagno": 979.0297444327989
+ },
+ "criterio2": {
+  "supera": false,
+  "percentile": 0.0
+ },
+ "criterio3": {
+  "supera": false,
+  "mediana": -0.27383644451649963,
+  "minimo": -0.3391995012569997,
+  "massimo": -0.20441779602599963,
+  "quota_sopra_ftse": 0.0,
+  "ftse_tr_netto": 0.04895148722163989,
+  "n": 24
+ },
+ "criterio4": {
+  "supera": false,
+  "casi_sopra": 0,
+  "di": 4,
+  "dettaglio": {
+   "rob_spostamento_0": [
+    0.045682395485001415,
+    0.17877915585434012
+   ],
+   "rob_spostamento_5": [
+    0.09493618979200136,
+    0.17877915585434012
+   ],
+   "rob_spostamento_10": [
+    -0.05214795494999924,
+    0.17877915585434012
+   ],
+   "rob_spostamento_15": [
+    -0.11254977532299926,
+    0.17877915585434012
+   ]
+  }
+ },
+ "supera_la_verifica": false,
+ "ultima_seduta": "2026-11-17",
+ "combinazioni_fase7": 118,
+ "simulazioni_fase7": 59236,
+ "seme": 20260430
+}

@@ -571,3 +571,80 @@ def test_il_segnale_composito_usa_ranghi_percentuali_dello_stesso_giorno(mercato
     rr = pd.Series(mk.seg['REV'][t, k]).rank(pct=True).values
     assert np.allclose(mk.comp[L][t, k], (rm + rr) / 2)
     assert np.isnan(mk.comp[L][t, ~ok]).all()
+
+
+# ============================================================ fase 7: ritardo, ancora, esclusione, calendario, segnale_oggi
+def test_esecuzione_ritardata_di_un_giorno():
+    import strategie as ST
+    p = sintetico([10, 10, 11, 12, 13, 14, 15], [10.1, 10.1, 11.1, 12.1, 13.1, 14.1, 15.1], [9.9, 9.9, 10.9, 11.9, 12.9, 13.9, 14.9],
+                  [10, 10, 11, 12, 13, 14, 15])
+    base = M.Simulatore(p, pan_div(p, {}), config=M.Config(lordo=True, liquida_a_fine=False))
+    base.esegui(CompraAlGiorno(0, 4000))                          # decisione giorno 0 -> acquisto giorno 1 (apertura 10)
+    rit = M.Simulatore(p, pan_div(p, {}), config=M.Config(lordo=True, liquida_a_fine=False))
+    rit.esegui(ST.Ritardata(CompraAlGiorno(0, 4000)))             # -> acquisto giorno 2 (apertura 11)
+    assert base.pos['AAA'].i_ingresso == 1 and base.pos['AAA'].prezzo_base == 10
+    assert rit.pos['AAA'].i_ingresso == 2 and rit.pos['AAA'].prezzo_base == 11
+    # vendita ritardata allo stesso modo
+    r2 = M.Simulatore(p, pan_div(p, {}), config=M.Config(lordo=True, liquida_a_fine=False))
+    r2.esegui(ST.Ritardata(CompraAlGiorno(0, 4000, i1=3)))
+    assert r2.trades[0]['data_uscita'] == p.calendario[5]          # decisione giorno 3 -> vendita giorno 5 (non 4)
+
+
+def test_rotazione_con_ancora_spostata(mercato):
+    import strategie as ST
+    mk = mercato
+    for s in (0, 5, 15):
+        a = mk.idec + s
+        r = mk.sim().esegui(ST.Rotazione(mk, 'COMP', 21, 6, 0, 1e6, ancora=a), inizio=mk.idec, fine=mk.i1)
+        t = r.trades
+        assert t.i_ingresso.min() == a + 1                               # niente prima dell'ancora
+        assert ((t.i_ingresso - 1 - a) % 21 == 0).all()                  # solo nei giorni di ribilanciamento
+
+
+def test_escludi_toglie_il_titolo_dall_universo_senza_toccare_l_originale(mercato):
+    import strategie as ST
+    mk = mercato
+    tk = next(t for t in ('STMMI', 'ENI', 'ISP') if mk.elig[1e6][mk.idec:, mk.col[t]].any())
+    mx = mk.escludi(tk)
+    assert not mx.elig[1e6][:, mk.col[tk]].any() and mk.elig[1e6][mk.idec:, mk.col[tk]].any()
+    assert np.isnan(mx.comp[1e6][:, mk.col[tk]]).all()
+    r = mx.sim().esegui(ST.Rotazione(mx, 'COMP', 21, 6, 0, 1e6), inizio=mx.idec, fine=mx.i1)
+    assert tk not in set(r.trades.ticker)
+
+
+def test_calendario_di_borsa_coincide_con_i_dati_e_prossimo_ribilanciamento():
+    import segnale_oggi as SO
+    cal = D.carica_indice(pd.Timestamp('2026-11-17')).index
+    gen = SO.sedute_future(pd.Timestamp('2025-01-01'), len(cal))
+    gen = [d for d in gen if d <= cal[-1]]
+    assert list(cal) == gen                                            # stesse sedute (festivita' ordinarie)
+    oggi, prossimo, stimata = SO.prossimo_ribilanciamento(pd.bdate_range('2025-08-25', periods=60), ancora=pd.Timestamp('2025-08-29'))
+    assert not oggi and stimata
+    cal21 = pd.bdate_range('2025-08-29', periods=22)                    # ultima seduta = ancora + 21
+    assert SO.prossimo_ribilanciamento(cal21, ancora=cal21[0])[0] is True
+
+
+def test_proposte_di_segnale_oggi():
+    import segnale_oggi as SO
+    tickers = list('ABCDEFGHIJ')
+    ordine = np.arange(10)
+    ptf = pd.DataFrame({'ticker': ['A', 'H', 'Z'], 'azioni': [10, 5, 3], 'prezzo_carico': [1.0, 2.0, 3.0]})
+    tenere, vendere, comprare, restano = SO.proposte(ordine, tickers, ptf)
+    assert tenere == list('ABCDEF')
+    assert vendere == ['H', 'Z']                                         # oltre il 6o posto o non ammesso
+    assert comprare == ['B', 'C', 'D', 'E', 'F']
+    assert SO.proposte(ordine, tickers, pd.DataFrame(columns=['ticker', 'azioni', 'prezzo_carico']))[2] == list('ABCDEF')
+
+
+def test_segnali_fino_al_30_aprile_non_cambiano_aggiungendo_dati_successivi(mercato):
+    import strategie as ST
+    ultima = pd.Timestamp(pd.read_csv(D.RICERCA / 'indice_ftsemib.csv', parse_dates=['data']).data.max())
+    pieno = ST.Mercato(ultima)
+    n = mercato.n
+    assert pieno.n > n
+    cols = [pieno.col[t] for t in mercato.tickers]            # il mercato pieno ha anche titoli quotati solo dopo il 30/4
+    for L in ST.LIQUIDITA:
+        a, b = mercato.comp[L], pieno.comp[L][:n][:, cols]
+        assert np.array_equal(np.isnan(a), np.isnan(b)) and np.allclose(a, b, equal_nan=True)
+    for k in ('MOM', 'REV', 'POT'):
+        assert np.allclose(mercato.seg[k], pieno.seg[k][:n][:, cols], equal_nan=True)

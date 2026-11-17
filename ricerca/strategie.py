@@ -101,32 +101,50 @@ class Mercato:
         self.univ = self.sg.universo.reindex(columns=self.tickers).values.astype(bool)
         liq = self.cx.liq
         self.elig = {L: self.univ & (np.nan_to_num(liq, nan=-1.0) >= L) for L in LIQUIDITA}
-        self.comp = {}
-        for L in LIQUIDITA:
-            ok = self.elig[L] & ~np.isnan(self.seg['MOM']) & ~np.isnan(self.seg['REV'])
-            r = lambda X: pd.DataFrame(np.where(ok, X, np.nan)).rank(axis=1, pct=True).values
-            self.comp[L] = (r(self.seg['MOM']) + r(self.seg['REV'])) / 2
-        self._rank = {}
+        self._calcola_comp()
         # rendimento da dividendo e pesi del FTSE MIB (solo dati fino a idec per i pesi)
         cff = self.pr.chiusura_ff()
         self.pesi = RF.pesi_componenti(cff, self.an.azioni_circolazione, self.idec)
         self.y_div = RF.rendimento_dividendo_giornaliero(cff, self.dpan, self.pesi)
         self.cff = self.cx.cff
 
+    def _calcola_comp(self):
+        """COMP = media dei ranghi percentuali (0-1) di MOM e REV nello stesso giorno tra i titoli che passano il filtro."""
+        self.comp = {}
+        for L in LIQUIDITA:
+            ok = self.elig[L] & ~np.isnan(self.seg['MOM']) & ~np.isnan(self.seg['REV'])
+            r = lambda X: pd.DataFrame(np.where(ok, X, np.nan)).rank(axis=1, pct=True).values
+            self.comp[L] = (r(self.seg['MOM']) + r(self.seg['REV'])) / 2
+        self._rank = {}
+
+    def escludi(self, ticker):
+        """Copia del mercato con il titolo tolto dall'universo (robustezza 'senza il titolo migliore')."""
+        import copy
+        m = copy.copy(self)
+        m.univ = self.univ.copy()
+        k = self.col[ticker]
+        m.univ[:, k] = False
+        m.elig = {L: e.copy() for L, e in self.elig.items()}
+        for e in m.elig.values():
+            e[:, k] = False
+        m._calcola_comp()
+        return m
+
     def segnale(self, nome, L):
         return self.comp[L] if nome == 'COMP' else self.seg[nome]
 
-    def ranghi(self, nome, L):
+    def ranghi(self, nome, L, da=None):
         """(rank, ordine): rank[t, k] = posizione (0 = migliore) tra i titoli ammessi in t, INF se non ammesso;
         ordine[t] = colonne ordinate. Parita': prima il titolo piu' liquido."""
-        key = (nome, L)
+        da = self.idec if da is None else min(int(da), self.idec)
+        key = (nome, L, da)
         if key not in self._rank:
             X = self.segnale(nome, L)
             valido = self.elig[L] & ~np.isnan(X)
             liqv = np.nan_to_num(self.cx.liq)
             rank = np.full(X.shape, INF, dtype=np.int64)
             ordine = [None] * self.n
-            for t in range(self.idec, self.n):
+            for t in range(da, self.n):
                 idx = np.flatnonzero(valido[t])
                 o = idx[np.lexsort((-liqv[t, idx], -X[t, idx]))]
                 ordine[t] = o
@@ -199,18 +217,20 @@ class Rotazione(M.Strategia):
     """Famiglia A: ogni R sedute (dal giorno di scelta) ordina i titoli ammessi per il segnale S e tiene i primi K;
     vende solo i titoli scesi oltre la posizione K + B (o non piu' ammessi)."""
 
-    def __init__(self, mk: Mercato, S: str, R: int, K: int, B: int, L: float, regole: Regole = Regole(), dim: Dim | None = None):
+    def __init__(self, mk: Mercato, S: str, R: int, K: int, B: int, L: float, regole: Regole = Regole(), dim: Dim | None = None,
+                 ancora: int | None = None):
         self.mk, self.S, self.R, self.K, self.B, self.L, self.regole = mk, S, R, K, B, L, regole
+        self.ancora = mk.idec if ancora is None else int(ancora)      # primo giorno di decisione; poi ogni R sedute
         self.dim = dim or Dim(K)
-        self.rank, self.ordine = mk.ranghi(S, L)
+        self.rank, self.ordine = mk.ranghi(S, L, self.ancora)
 
     def decidi(self, i, sim):
         mk = self.mk
-        if i < mk.idec:
+        if i < self.ancora:
             return []
         ordini = list(self.regole.vendite(mk, i, sim))
         venduti = {o.ticker for o in ordini}
-        if (i - mk.idec) % self.R == 0:
+        if (i - self.ancora) % self.R == 0:
             for tk in sim.pos:
                 if self.rank[i, mk.col[tk]] >= self.K + self.B and tk not in venduti:
                     ordini.append(M.Vendita(tk, 'strategia'))
@@ -268,15 +288,27 @@ class Eventi(M.Strategia):
         return ordini
 
 
+class Ritardata(M.Strategia):
+    """Esecuzione ritardata di un giorno: gli ordini decisi alla chiusura di t vanno all'apertura di t+2 (non t+1)."""
+
+    def __init__(self, interna: M.Strategia):
+        self.interna, self.prec = interna, []
+
+    def decidi(self, i, sim):
+        nuovi = self.interna.decidi(i, sim)
+        out, self.prec = self.prec, nuovi
+        return out
+
+
 # ------------------------------------------------------------------------------------------ casuali
-def piano_da_trades(trades: pd.DataFrame):
+def piano_da_trades(trades: pd.DataFrame, ritardo: int = 0):
     """Calendario degli ingressi di una simulazione: {giorno_decisione: [(importo, seduta_uscita_forzata | None)]}.
     L'uscita e' forzata alla stessa data solo se la strategia vendeva per sua regola ('strategia', cioe' la
     classifica); le uscite di prezzo e di tempo si ripetono con le stesse regole."""
     piano = {}
     for r in trades.itertuples():
-        forzata = int(r.i_uscita) if r.motivo == 'strategia' else None
-        piano.setdefault(int(r.i_ingresso) - 1, []).append((float(r.importo_ordine), forzata))
+        forzata = int(r.i_uscita) - ritardo if r.motivo == 'strategia' else None
+        piano.setdefault(int(r.i_ingresso) - 1 - ritardo, []).append((float(r.importo_ordine), forzata))
     return piano
 
 
@@ -311,15 +343,19 @@ class Casuale(M.Strategia):
 
 
 def percentile_casuali(mk: Mercato, config: M.Config, trades: pd.DataFrame, L: float, regole: Regole, rendimento_strategia: float,
-                       id_comb: int, n: int = N_RIPETIZIONI, seme: int = SEME):
-    """500 strategie casuali con lo stesso calendario di ingressi, importi, regole di uscita e filtro di liquidita'.
-    Ritorna (percentile del rendimento netto della strategia tra i casuali, rendimenti casuali)."""
-    piano = piano_da_trades(trades)
+                       id_comb: int, n: int = N_RIPETIZIONI, seme: int = SEME, i_inizio: int | None = None,
+                       i_fine: int | None = None, ritardo: int = 0):
+    """500 strategie casuali con lo stesso calendario di ingressi, importi, regole di uscita e filtro di liquidita'
+    (e, se `ritardo`=1, la stessa esecuzione ritardata). Ritorna (percentile del rendimento netto tra i casuali, rendimenti)."""
+    i_inizio = mk.idec if i_inizio is None else i_inizio
+    i_fine = mk.i1 if i_fine is None else i_fine
+    piano = piano_da_trades(trades, ritardo)
     ss = np.random.SeedSequence([seme, int(id_comb)])
     rend = np.empty(n)
     for j, fig in enumerate(ss.spawn(n)):
         sim = mk.sim(config)
-        sim.esegui(Casuale(mk, L, piano, regole, np.random.default_rng(fig)), inizio=mk.idec, fine=mk.i1)
+        st = Casuale(mk, L, piano, regole, np.random.default_rng(fig))
+        sim.esegui(Ritardata(st) if ritardo else st, inizio=i_inizio, fine=i_fine)
         rend[j] = sim.equity[-1] / sim.capitale - 1
     pct = 100.0 * ((rend < rendimento_strategia).sum() + 0.5 * (rend == rendimento_strategia).sum()) / n
     return pct, rend
