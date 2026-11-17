@@ -49,6 +49,7 @@ A2A,2024-07-31,Intesa SanPaolo,Buy,2.3
 A2A,2024-07-22,Kepler Cheuvreux,Buy,2.2
 A2A,2024-07-18,Equita,Hold,2.21
 A2A,2024-06-04,Equita,Hold,2.1
+ACE,2026-11-16,Intermonte,Outperform,25.0
 ACE,2026-09-25,Equita,Buy,26.0
 ACE,2026-08-20,Equita,Buy,26.0
 ACE,2026-07-24,Akros,Buy,26.0
@@ -73,6 +74,7 @@ ADB,2026-05-20,Mediobanca,Neutral,8.699999999999998
 ADB,2025-09-15,Mediobanca,Neutral,9.3
 ADB,2025-09-12,Intesa SanPaolo,Neutral,9.4
 AEF,2025-08-27,Mediobanca,Neutral,0.45
+AGP,2026-11-16,Equita,HOLD,6.0
 AGP,2026-09-14,Equita,Hold,7.5
 AGP,2026-07-08,Equita,Buy,8.6
 AGP,2026-07-08,Intesa SanPaolo,Buy,10.2
@@ -431,6 +433,7 @@ AZM,2025-07-09,Deutsche Bank,Buy,35.0
 AZM,2025-07-09,Intesa SanPaolo,Buy,27.5
 AZM,2025-07-09,Mediobanca,Outperform,
 AZM,2025-07-01,Akros,Buy,31.0
+BAMI,2026-11-16,Mediobanca,Outperform,17.5
 BAMI,2026-11-13,Ubs,Neutral,14.1
 BAMI,2026-11-12,Morgan Stanley,Equalweight,15.0
 BAMI,2026-11-06,Intesa SanPaolo,Buy,15.6
@@ -1384,6 +1387,7 @@ BZU,2025-08-06,Morgan Stanley,Equalweight,44.0
 BZU,2025-07-16,Equita,Buy,55.0
 BZU,2025-07-15,Barclays,Overweight,57.0
 BZU,2025-07-03,Morgan Stanley,,45.0
+CAI,2026-11-13,Equita,BUY,2.6
 CAI,2026-04-23,Equita,Buy,3.3
 CAI,2025-08-06,Equita,Buy,3.3
 CAI,2025-07-04,Equita,Buy,3.3
@@ -1643,6 +1647,8 @@ CRL,2024-07-23,Kepler Cheuvreux,Hold,18.5
 CRL,2024-07-16,Equita,Hold,21.0
 CVG,2025-08-06,EnVent,Outperform,3.9
 CVG,2025-08-04,Integrae Sim,Buy,4.5
+CY4,2026-11-16,Intermonte,Buy,12.0
+CY4,2026-11-16,Equita,Buy,11.2
 CY4,2026-09-22,Equita,Buy,10.2
 CY4,2026-09-22,Intermonte,Buy,11.5
 CY4,2026-09-14,Equita,Buy,10.2
@@ -1787,6 +1793,8 @@ DEX,2025-05-14,Equita,Buy,11.0
 DGV,2025-09-26,Tp Icap,Buy,20.0
 DHH,2026-09-29,Akros,Buy,34.5
 DHH,2026-09-24,Intermonte,Buy,37.0
+DIA,2026-11-16,Deutsche Bank,Sell,70.0
+DIA,2026-11-13,Equita,BUY,95.0
 DIA,2026-11-13,Intermonte,Outperform,105.0
 DIA,2026-11-13,Akros,Accumulate,91.5
 DIA,2026-11-13,Morgan Stanley,,82.0
@@ -2056,6 +2064,7 @@ EM,2026-09-08,Intermonte,Outperform,1.1
 EM,2026-05-18,Intermonte,Outperform,1.45
 EM,2025-09-01,Intermonte,Outperform,1.6
 ENA,2025-06-30,Banca Finnat,Buy,1.35
+ENAV,2026-11-16,Barclays,,6.4
 ENAV,2026-11-13,Akros,Neutral,4.5
 ENAV,2026-11-13,Equita,Hold,4.0
 ENAV,2026-11-09,Equita,Hold,3.9
@@ -2086,6 +2095,7 @@ ENAV,2025-08-07,Barclays,Outperform,4.9
 ENAV,2025-08-07,Intesa SanPaolo,Buy,4.9
 ENAV,2025-08-07,UBS,Buy,4.85
 ENAV,2025-07-16,Equita,Hold,3.5
+ENEL,2026-11-16,RBC,,8.6
 ENEL,2026-11-13,AlphaValue,Buy,12.8
 ENEL,2026-11-09,Morgan Stanley,,9.0
 ENEL,2026-11-04,Ubs,Buy,10.35
@@ -2709,6 +2719,7 @@ FBK,2022-10-19,Equita,Buy,15.6
 FBK,2022-10-14,Kepler Cheuvreux,Buy,16.3
 FBK,2014-12-16,Fidentiis,Hold,
 FCH,2026-10-12,Akros,Buy,9.5
+FCT,2026-11-16,Equita,Buy,16.2
 FCT,2026-11-13,Intermonte,Outperform,18.2
 FCT,2026-10-28,Deutsche Bank,Buy,19.0
 FCT,2026-10-27,Equita,Buy,16.0
@@ -3503,6 +3514,8 @@ IOT,2025-03-18,Mediobanca,Neutral,2.3
 IOT,2024-11-21,Intesa SanPaolo,Buy,3.1
 IOT,2024-11-14,Mediobanca,Neutral,2.4
 IOT,2024-09-18,Intesa SanPaolo,Buy,3.2
+IP,2026-11-16,Ubs,Neutral,40.5
+IP,2026-11-16,Mediobanca,Outperform,46.6
 IP,2026-10-15,Intermonte,Outperform,48.0
 IP,2026-10-07,Equita,Buy,46.0
 IP,2026-08-06,Akros,Accumulate,43.0
@@ -4128,6 +4141,7 @@ LTMC,2025-07-16,Akros,Buy,26.0
 LTMC,2025-07-16,Jefferies,Buy,32.0
 LTMC,2025-07-16,Kepler Cheuvreux,,28.0
 LTMC,2025-05-14,Equita,Buy,25.0
+LUVE,2026-11-16,Equita,BUY,68.7
 LUVE,2026-10-12,Equita,Buy,
 LUVE,2026-09-09,Intesa SanPaolo,Buy,73.3
 LUVE,2026-09-08,Intermonte,Outperform,75.0
@@ -4150,6 +4164,8 @@ LUVE,2025-10-10,Mediobanca,Outperform,
 LUVE,2025-09-16,Mediobanca,Outperform,39.5
 LUVE,2025-09-15,Intesa SanPaolo,Buy,38.0
 LUVE,2025-07-11,Intermonte,Outperform,39.2
+MAIRE,2026-11-16,Akros,Buy,17.0
+MAIRE,2026-11-16,Equita,Buy,18.5
 MAIRE,2026-10-30,Equita,Biu,18.5
 MAIRE,2026-10-29,Intesa SanPaolo,Buy,16.8
 MAIRE,2026-10-27,Barclays,Underweight,17.5
@@ -4219,6 +4235,8 @@ MAPS,2026-06-19,MidCap Partners,Buy,5.4
 MARE,2026-10-02,KT&Partners,Add,9.0
 MARE,2026-06-30,Alantra,Buy,7.8
 MARP,2026-07-24,Integrae,Buy,5.1
+MARR,2026-11-16,Equita,HOLD,5.6
+MARR,2026-11-16,Intermonte,Neutral,5.5
 MARR,2026-10-26,Equita,Hold,6.3
 MARR,2026-08-05,Equita,Hold,7.0
 MARR,2026-07-24,Intermonte,Neutral,7.7
@@ -4346,6 +4364,7 @@ MN,2026-02-13,Intermonte,Buy,3.0
 MN,2025-10-08,Intesa SanPaolo,Buy,2.7
 MN,2025-09-01,Equita,Buy,2.8
 MN,2025-07-23,Akros,Neutral,2.3
+MOL,2026-11-16,Equita,Buy,55.0
 MOL,2026-09-21,Intesa SanPaolo,Buy,55.0
 MOL,2026-09-01,Equita,Buy,55.0
 MOL,2026-06-10,Akros,Buy,42.0
@@ -5083,6 +5102,7 @@ PRE,2025-03-12,Integrae Sim,Buy,1.9
 PRE,2024-10-07,Integrae Sim,Buy,1.9
 PRO,2026-08-10,Intesa SanPaolo,Buy,3.5
 PRO,2026-04-14,Intesa SanPaolo,Buy,0.35
+PRT,2026-11-16,Intermonte,Buy,8.2
 PRT,2026-11-02,Tp Icap,Buy,10.2
 PRT,2026-09-11,Intesa SanPaolo,Buy,8.9
 PRT,2026-09-11,Tp Icap,Buy,9.0
@@ -5101,6 +5121,7 @@ PRT,2025-09-12,Intermonte,Buy,6.7
 PRT,2025-09-12,Intesa SanPaolo,Buy,6.7
 PRT,2025-09-11,Tp Icap,Buy,6.2
 PRT,2025-09-10,Tp Icap,Buy,6.2
+PRY,2026-11-16,Oddo BHF,Outperform,157.0
 PRY,2026-11-05,Berenberg,Buy,150.0
 PRY,2026-11-02,IntesaSanpaolo,Buy,165.0
 PRY,2026-11-02,Citi,,136.0
@@ -5811,6 +5832,7 @@ REVO,2024-03-18,Equita,Buy,12.0
 REVO,2024-03-18,Intesa SanPaolo,Buy,11.6
 REVO,2024-03-15,Intermonte,Buy,12.0
 REVO,2024-03-11,Intesa SanPaolo,Buy,11.6
+REY,2026-11-13,Intesa SanPaolo,Neutral,155.0
 REY,2026-11-13,Equita,Buy,154.0
 REY,2026-11-13,Ubs,Buy,170.5
 REY,2026-11-13,Intermonte,Buy,185.0
@@ -7063,6 +7085,7 @@ TGYM,2025-04-04,Barclays,Market perform,13.0
 TGYM,2025-03-31,Intesa SanPaolo,Buy,13.0
 TIME,2026-07-03,KT&Partners,Hold,0.4
 TIME,2025-06-30,KT&Partners,Add,0.65
+TIP,2026-11-16,Equita,BUY,14.6
 TIP,2026-10-15,Equita,Buy,15.6
 TIP,2026-10-14,Jefferies,Buy,14.5
 TIP,2026-09-21,Intermonte,Buy,14.8
@@ -7082,6 +7105,7 @@ TIP,2025-09-12,Intermonte,Buy,11.8
 TIP,2025-09-08,Akros,Buy,12.5
 TIP,2025-08-27,Akros,Buy,12.5
 TISG,2025-08-28,Berenberg,Buy,10.0
+TIT,2026-11-16,Intermonte,Neutral,6.5
 TIT,2026-11-11,Oddo BHF,Hold,6.0
 TIT,2026-11-02,Barclays,,6.25
 TIT,2026-10-19,Equita,Hold,
@@ -7186,6 +7210,7 @@ TNXT,2025-07-21,Equita,Hold,10.0
 TNXT,2025-07-21,Intesa SanPaolo,Buy,17.5
 TNXT,2025-07-21,Mediobanca,Neutral,
 TNXT,2025-07-18,Akros,Buy,13.0
+TPRO,2026-11-16,Ubs,Buy,38.0
 TPRO,2026-11-12,Intesa SanPaolo,Buy,42.0
 TPRO,2026-11-12,Np Morgan,,38.0
 TPRO,2026-11-12,Deutsche Bank,Buy,45.0
@@ -7334,6 +7359,8 @@ TRN,2025-05-05,Intesa SanPaolo,Underperform,8.3
 TRN,2025-04-09,Hsbc,Buy,10.0
 TRN,2025-03-27,Morgan Stanley,Underweight,8.0
 TRN,2025-03-27,Deutsche Bank,Hold,8.5
+TXT,2026-11-16,Akros,Buy,60.0
+TXT,2026-11-16,Intermonte,Outperform,57.0
 TXT,2026-08-07,Intermonte,Outperform,57.0
 TXT,2026-04-16,Akros,Buy,40.0
 TXT,2026-03-03,Intermonte,Outperform,47.4
