@@ -1,20 +1,20 @@
 {
- "eseguito_il": "2026-11-19T04:04",
+ "eseguito_il": "2026-11-20T03:56",
  "fonti": {
   "ubs": {
    "modalita": "attiva",
-   "lette": 22,
+   "lette": 19,
    "nuove": 0,
-   "doppioni": 22,
+   "doppioni": 19,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "equita": {
    "modalita": "attiva",
-   "lette": 26,
+   "lette": 25,
    "nuove": 0,
-   "doppioni": 26,
+   "doppioni": 25,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
@@ -30,18 +30,18 @@
   },
   "4trading": {
    "modalita": "attiva",
-   "lette": 115,
-   "nuove": 12,
-   "doppioni": 103,
+   "lette": 99,
+   "nuove": 10,
+   "doppioni": 89,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "soldionline": {
    "modalita": "attiva",
-   "lette": 274,
+   "lette": 236,
    "nuove": 5,
-   "doppioni": 269,
+   "doppioni": 231,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
@@ -56,7 +56,7 @@
    "errore": ""
   }
  },
- "nuove_totali": 17,
+ "nuove_totali": 15,
  "emittenti_nuovi": [],
- "non_riconosciuti": 15
+ "non_riconosciuti": 19
 }
