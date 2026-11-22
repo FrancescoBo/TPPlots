@@ -1,49 +1,49 @@
 {
- "eseguito_il": "2026-11-21T03:53",
+ "eseguito_il": "2026-11-22T02:58",
  "fonti": {
   "ubs": {
    "modalita": "attiva",
-   "lette": 20,
-   "nuove": 2,
-   "doppioni": 18,
+   "lette": 168,
+   "nuove": 0,
+   "doppioni": 168,
    "quarantena": 0,
    "conflitti": 0,
    "errore": ""
   },
   "equita": {
    "modalita": "attiva",
-   "lette": 18,
-   "nuove": 1,
-   "doppioni": 17,
+   "lette": 268,
+   "nuove": 34,
+   "doppioni": 228,
    "quarantena": 0,
-   "conflitti": 0,
+   "conflitti": 6,
    "errore": ""
   },
   "intesa": {
    "modalita": "attiva",
-   "lette": 40,
-   "nuove": 3,
-   "doppioni": 37,
-   "quarantena": 0,
-   "conflitti": 0,
+   "lette": 410,
+   "nuove": 78,
+   "doppioni": 328,
+   "quarantena": 2,
+   "conflitti": 2,
    "errore": ""
   },
   "4trading": {
    "modalita": "attiva",
-   "lette": 99,
-   "nuove": 0,
-   "doppioni": 99,
+   "lette": 533,
+   "nuove": 4,
+   "doppioni": 528,
    "quarantena": 0,
-   "conflitti": 0,
+   "conflitti": 1,
    "errore": ""
   },
   "soldionline": {
    "modalita": "attiva",
-   "lette": 231,
-   "nuove": 6,
-   "doppioni": 225,
-   "quarantena": 0,
-   "conflitti": 0,
+   "lette": 3588,
+   "nuove": 333,
+   "doppioni": 3221,
+   "quarantena": 6,
+   "conflitti": 28,
    "errore": ""
   },
   "teleborsa": {
@@ -56,7 +56,10 @@
    "errore": ""
   }
  },
- "nuove_totali": 12,
- "emittenti_nuovi": [],
- "non_riconosciuti": 16
+ "nuove_totali": 449,
+ "emittenti_nuovi": [
+  "Internonte",
+  "Nomura"
+ ],
+ "non_riconosciuti": 33
 }
