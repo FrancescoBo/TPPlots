@@ -103,6 +103,7 @@ ALA,2025-07-11,Equita,Hold,37.5
 ALMS,2026-10-07,IntesaSanpaolo,Buy,6.0
 ALMS,2026-10-07,Intesa Sanpaolo,Buy,6.0
 ALMS,2026-08-10,Intesa SanPaolo,Buy,6.0
+AMP,2026-11-26,Akros,Accumulate,14.0
 AMP,2026-11-18,Barclays,Equalweight,12.5
 AMP,2026-11-05,Akros,Accumulate,14.0
 AMP,2026-10-30,Intermonte,Outperform,16.0
@@ -3166,6 +3167,7 @@ IRE,2025-07-31,Equita,Buy,2.85
 IRE,2025-07-31,Intermonte,Outperform,2.95
 IRE,2025-07-28,Mediobanca,Outperform,
 IRE,2025-07-23,Equita,Buy,2.85
+ISP,2026-11-26,Equita,Buy,7.6
 ISP,2026-11-06,Citi,Buy,7.18
 ISP,2026-11-05,RBC Capital,Outperform,7.75
 ISP,2026-11-05,RBC,Outperform,7.75
@@ -3359,6 +3361,7 @@ IVG,2025-07-28,Mediobanca,Neutral,
 IVG,2025-07-22,Equita,Buy,18.5
 IVG,2025-07-21,Mediobanca,Neutral,
 IVG,2025-07-14,Deutsche Bank,Buy,16.0
+IWB,2026-11-26,CFO SIM,Buy,30.0
 IWB,2026-11-19,Equita,Buy,24.0
 IWB,2026-09-24,CFO SIM,Buy,30.0
 IWB,2026-09-23,MidCap Partners,Buy,30.0
@@ -3525,6 +3528,7 @@ LDO,2025-01-15,Mediobanca,Outperform,32.0
 LDO,2025-01-10,Bank of America ML,Buy,35.0
 LNDR,2025-07-07,Akros,Neutral,1.8
 LON,2026-06-22,KT&Partners,Add,2.15
+LTMC,2026-11-26,Akros,Buy,35.0
 LTMC,2026-11-24,Equita,Buy,36.0
 LTMC,2026-11-24,Kepler Cheuvreux,Buy,35.0
 LTMC,2026-11-05,Equita,Buy,36.0
@@ -4495,6 +4499,8 @@ PRT,2025-09-10,Tp Icap,Buy,6.2
 PRT,2025-05-15,Intermonte,Buy,6.3
 PRT,2025-05-15,Intesa SanPaolo,Buy,6.0
 PRT,2025-03-12,Intesa SanPaolo,Buy,6.6
+PRY,2026-11-26,Intesa SanPaolo,Buy,165.0
+PRY,2026-11-26,Akros,Buy,146.0
 PRY,2026-11-16,Oddo BHF,Outperform,157.0
 PRY,2026-11-05,Berenberg,Buy,150.0
 PRY,2026-11-02,IntesaSanpaolo,Buy,165.0
@@ -4689,6 +4695,7 @@ PRY,2025-01-28,Bank of America ML,Buy,85.0
 PRY,2025-01-27,Morgan Stanley,Equalweight,64.0
 PRY,2025-01-24,Jefferies,Buy,80.0
 PRY,2025-01-15,Citi,Buy,73.0
+PST,2026-11-26,Akros,Buy,33.0
 PST,2026-11-20,Ubs,Buy,30.2
 PST,2026-11-18,Mediobanca,Outperform,30.0
 PST,2026-11-17,Intermonte,Outperform,30.5
@@ -6128,6 +6135,7 @@ STMMI,2025-01-20,Hsbc,Buy,30.0
 STMMI,2025-01-17,Berenberg,Buy,30.0
 STMMI,2025-01-16,Goldman Sachs,Neutral,27.0
 STMMI,2025-01-13,Akros,Neutral,27.0
+SYS,2026-11-26,Intesa SanPaolo,Buy,9.5
 SYS,2026-11-17,Intermonte,Outperform,9.0
 SYS,2026-11-13,IntesaSanpaolo,Buy,9.5
 SYS,2026-09-15,Internonte,Outperform,9.4
